@@ -10,11 +10,11 @@
 
 	//--------------------------------------------
 	 //　初回呼び出し用コンストラクタ
-DirectSound::DirectSound(HWND hwnd) {
+DirectSound::DirectSound(HWND hwnd_) {
 
 
-	DirectSoundCreate8(nullptr, &m_DSound8, nullptr);
-	m_DSound8->SetCooperativeLevel(hwnd, DSSCL_NORMAL);
+	DirectSoundCreate8(nullptr, &d_sound8_, nullptr);
+	d_sound8_->SetCooperativeLevel(hwnd_, DSSCL_NORMAL);
 
 	DSBUFFERDESC desc = {};
 	desc.dwSize = sizeof(DSBUFFERDESC);
@@ -24,16 +24,16 @@ DirectSound::DirectSound(HWND hwnd) {
 	desc.lpwfxFormat = nullptr;
 	desc.guid3DAlgorithm = GUID_NULL;
 
-	m_DSound8->CreateSoundBuffer(&desc, &m_PrimaryBuffer, nullptr);
+	d_sound8_->CreateSoundBuffer(&desc, &primary_buffer_, nullptr);
 }
 //-------------------------------------
 //　データ読み込み
-IDirectSoundBuffer8* DirectSound::LoadWaveFile(std::string file_name) {
+IDirectSoundBuffer8* DirectSound::LoadWaveFile(std::string file_name_) {
 
 
 	HMMIO hmmio = nullptr;
 	MMIOINFO mminfo = {};
-	hmmio = mmioOpen((LPSTR)file_name.c_str(), &mminfo, MMIO_READ);
+	hmmio = mmioOpen((LPSTR)file_name_.c_str(), &mminfo, MMIO_READ);
 
 	//ファイルのオープンに失敗した場合
 	if (!hmmio) {
@@ -105,17 +105,17 @@ IDirectSoundBuffer8* DirectSound::LoadWaveFile(std::string file_name) {
 	desc.guid3DAlgorithm = GUID_NULL; //3Dエフェクトを使用しない
 
 	IDirectSoundBuffer* buf = 0;
-	m_DSound8->CreateSoundBuffer(&desc, &buf, nullptr);
+	d_sound8_->CreateSoundBuffer(&desc, &buf, nullptr);
 
 	//戻り値がIDirectSoundBufferの為、IDirectSoundBuffer8に戻す
-	buf->QueryInterface(IID_IDirectSoundBuffer8, (void**)& m_SecBuffer);
+	buf->QueryInterface(IID_IDirectSoundBuffer8, (void**)& sec_buffer_);
 	buf->Release();
 
 
 	// WAVデータ書き込み
 	LPVOID write_data;
 	DWORD len;
-	m_SecBuffer->Lock(
+	sec_buffer_->Lock(
 		0,		     	//ロック開始位置
 		0,			    //メモリサイズ
 		&write_data,	//ロック位置のポインタ
@@ -126,23 +126,23 @@ IDirectSoundBuffer8* DirectSound::LoadWaveFile(std::string file_name) {
 	);
 
 	memcpy(write_data, wav_data, len);
-	m_SecBuffer->Unlock(write_data, len, nullptr, 0);
+	sec_buffer_->Unlock(write_data, len, nullptr, 0);
 	//　元音源を削除
 	delete[] wav_data;
 
-	if (m_SecBuffer == nullptr) {
+	if (sec_buffer_ == nullptr) {
 		MessageBox(0, "waveファイルの読み込みに失敗", 0, MB_OK);
 	}
 
-	return m_SecBuffer;
+	return sec_buffer_;
 }
 
 //-----------------------------------
 //　デストラクタ
 DirectSound::~DirectSound() {
 
-	m_DSound8->Release();
-	//m_PrimaryBuffer->Release();
+	d_sound8_->Release();
+	//primary_buffer_->Release();
 }
 
 
@@ -151,7 +151,7 @@ DirectSound::~DirectSound() {
 //  サウンドプレーヤー
 //==========================================
 
-bool AudioPlayer::Load(std::string alias, std::string file_name) {
+bool AudioPlayer::Load(std::string alias_, std::string file_name_) {
 
 	//まだ読み込んでいないサウンドデータである
 	/*
@@ -159,8 +159,8 @@ bool AudioPlayer::Load(std::string alias, std::string file_name) {
 		 valueをキーとした要素の検索を行う。
 		 要素あり→１　要素なし→０
 	*/
-	if (m_SoundData.count(alias) == 0) {
-		m_SoundData.emplace(alias, m_Sound->LoadWaveFile(file_name));
+	if (sound_data_.count(alias_) == 0) {
+		sound_data_.emplace(alias_, sound_->LoadWaveFile(file_name_));
 		return true;
 	}
 	return false;
@@ -169,22 +169,22 @@ bool AudioPlayer::Load(std::string alias, std::string file_name) {
 //------------------------------------
 // 再生
 void AudioPlayer::Play(
-	std::string alias,
-	int volume,
-	bool is_loop
+	std::string alias_,
+	int volume_,
+	bool is_loop_
 ) {
 
-	IDirectSoundBuffer8* sound = Find(alias);
+	IDirectSoundBuffer8* sound = Find(alias_);
 	if (sound == nullptr) {
 		return;//サウンドデータがなかった
 	}
 
-	if (is_loop) {
-		sound->SetVolume(volume);
+	if (is_loop_) {
+		sound->SetVolume(volume_);
 		sound->Play(0, 0, DSBPLAY_LOOPING);
 	}
 	else {
-		sound->SetVolume(volume);
+		sound->SetVolume(volume_);
 		sound->Play(0, 0, 0);
 		sound->SetCurrentPosition(0);
 	}
@@ -192,9 +192,9 @@ void AudioPlayer::Play(
 
 //----------------------------------
 // 停止
-void AudioPlayer::Stop(std::string alias) {
+void AudioPlayer::Stop(std::string alias_) {
 
-	IDirectSoundBuffer8* sound = Find(alias);
+	IDirectSoundBuffer8* sound = Find(alias_);
 	if (sound == nullptr) {
 		return;//サウンドデータがなかった
 	}
@@ -203,20 +203,20 @@ void AudioPlayer::Stop(std::string alias) {
 
 //----------------------------------
 // ボリューム調整
-void AudioPlayer::SetVolume(std::string alias, int volume) {
+void AudioPlayer::SetVolume(std::string alias_, int volume_) {
 
-	IDirectSoundBuffer8* sound = Find(alias);
+	IDirectSoundBuffer8* sound = Find(alias_);
 	if (sound == nullptr) {
 		return;//サウンドデータがなかった
 	}
-	sound->SetVolume(volume);
+	sound->SetVolume(volume_);
 }
 
 //-------------------------------
 //解放処理
-void AudioPlayer::Release(std::string alias) {
+void AudioPlayer::Release(std::string alias_) {
 
-	IDirectSoundBuffer8* sound = Find(alias);
+	IDirectSoundBuffer8* sound = Find(alias_);
 	if (sound == nullptr) {
 		return;//サウンドデータがなかった
 	}
@@ -224,16 +224,16 @@ void AudioPlayer::Release(std::string alias) {
 	if (sound) {
 		sound->Release();
 		sound = nullptr;
-		m_SoundData.erase(alias);//要素削除
+		sound_data_.erase(alias_);//要素削除
 	}
 }
 
-IDirectSoundBuffer8* AudioPlayer::Find(std::string alias) {
+IDirectSoundBuffer8* AudioPlayer::Find(std::string alias_) {
 
 	//サウンドデータをキーで検索
-	auto data = m_SoundData.find(alias);
+	auto data = sound_data_.find(alias_);
 	//サウンドデータがみつかった場合
-	if (data != m_SoundData.end()) {
+	if (data != sound_data_.end()) {
 		return data->second;
 	}
 	return nullptr;//見つからなかったのでnullを渡す
@@ -241,23 +241,23 @@ IDirectSoundBuffer8* AudioPlayer::Find(std::string alias) {
 
 AudioPlayer::~AudioPlayer() {
 
-	if (m_SoundData.empty()) {
+	if (sound_data_.empty()) {
 		//要素の削除がすべて完了している場合はクリア
-		m_SoundData.clear();
+		sound_data_.clear();
 	}
 	//解放漏れがある場合
-	for (auto data : m_SoundData) {
+	for (auto data : sound_data_) {
 		IDirectSoundBuffer8* sound = data.second;
 		if (sound == nullptr) {
 			continue;
 		}
 		sound->Release();
-		//m_SoundData.erase(data.first);
+		//sound_data_.erase(data.first);
 	}
-	m_SoundData.clear();
+	sound_data_.clear();
 
-	if (m_Sound) {
-		delete m_Sound;
+	if (sound_) {
+		delete sound_;
 	}
 }
 

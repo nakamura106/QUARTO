@@ -16,10 +16,10 @@ public:
 	void Play(int time_);
 
 private:
-	HRESULT hRes;
-	IGraphBuilder *m_Graph;
-	IMediaControl* m_Control;
-	IMediaEvent* m_Event;
+	HRESULT h_res_;
+	IGraphBuilder* graph_;
+	IMediaControl* control_;
+	IMediaEvent* event_;
 };
 
 #endif // !VIDEO_H_

@@ -16,7 +16,7 @@ public:
 	};
 
 	// @brife キーの種類
-	enum KEY_INFO
+	enum KeyInfo
 	{
 		ESC_KEY,
 		SPACE_KEY,
@@ -73,7 +73,7 @@ public:
 		BUTTON_STATE_MAX,
 	};
 
-	enum INPUT_STATE
+	enum InputState
 	{
 		NOT_PUSH,		//押されていない
 		PUSH_DOWN,		//押された瞬間
@@ -115,7 +115,7 @@ public:
 	* @return 判定結果、押されているならtrue
 	* @param[in] key 判定したいキー
 	*/
-	bool GetKey(KEY_INFO key_);
+	bool GetKey(KeyInfo key_);
 
 	/**
 	* @brief 入力情報の更新@n
@@ -132,7 +132,7 @@ public:
 	* @return 判定結果、押された瞬間ならtrue
 	* @param[in] key 判定したいキー
 	*/
-	bool GetKeyDown(KEY_INFO key_);
+	bool GetKeyDown(KeyInfo key_);
 
 	/**
 	* @brief キーが離された瞬間の判定関数@n
@@ -140,7 +140,7 @@ public:
 	* @return 判定結果、離されたならtrue
 	* @param[in] key 判定したいキー
 	*/
-	bool GetKeyUp(KEY_INFO key_);
+	bool GetKeyUp(KeyInfo key_);
 
 	/**
 	* @brief クリックした瞬間判定関数@n
@@ -206,9 +206,9 @@ public:
 
 		ButtonState ButtonStates[ButtonKind::BUTTON_KIND_MAX];
 
-		INPUT_STATE InputState[KEY_INFO::MAX_KEY_INFO];
+		InputState InputState[KeyInfo::MAX_KEY_INFO];
 
-		int KeyInfo[KEY_INFO::MAX_KEY_INFO] = {
+		int KeyInfo[KeyInfo::MAX_KEY_INFO] = {
 			DIK_ESCAPE,
 			DIK_SPACE,
 			DIK_UP,

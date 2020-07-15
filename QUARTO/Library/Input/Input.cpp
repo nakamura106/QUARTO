@@ -379,42 +379,42 @@ void Input::KeyStateUpdate()
 	{
 		if (Key[KeyInfo[i]] & 0x80)
 		{
-			if (InputState[i] == INPUT_STATE::NOT_PUSH || InputState[i] == INPUT_STATE::PUSH_UP)
+			if (InputState[i] == InputState::NOT_PUSH || InputState[i] == InputState::PUSH_UP)
 			{
-				InputState[i] = INPUT_STATE::PUSH_DOWN;
+				InputState[i] = InputState::PUSH_DOWN;
 			}
 			else
 			{
-				InputState[i] = INPUT_STATE::PUSH;
+				InputState[i] = InputState::PUSH;
 			}
 		}
 		else
 		{
-			if (InputState[i] == INPUT_STATE::PUSH || InputState[i] == INPUT_STATE::PUSH_DOWN)
+			if (InputState[i] == InputState::PUSH || InputState[i] == InputState::PUSH_DOWN)
 			{
-				InputState[i] = INPUT_STATE::PUSH_UP;
+				InputState[i] = InputState::PUSH_UP;
 			}
 			else
 			{
-				InputState[i] = INPUT_STATE::NOT_PUSH;
+				InputState[i] = InputState::NOT_PUSH;
 			}
 		}
 	}
 }
 
-bool Input::GetKey(KEY_INFO key_)
+bool Input::GetKey(KeyInfo key_)
 {
-	return (InputState[key_] == INPUT_STATE::PUSH);
+	return (InputState[key_] == InputState::PUSH);
 }
 
-bool Input::GetKeyDown(KEY_INFO key_)
+bool Input::GetKeyDown(KeyInfo key_)
 {
-	return (InputState[key_] == INPUT_STATE::PUSH_DOWN);
+	return (InputState[key_] == InputState::PUSH_DOWN);
 }
 
-bool Input::GetKeyUp(KEY_INFO key_)
+bool Input::GetKeyUp(KeyInfo key_)
 {
-	return (InputState[key_] == INPUT_STATE::PUSH_UP);
+	return (InputState[key_] == InputState::PUSH_UP);
 }
 
 void Input::UpdateInput()

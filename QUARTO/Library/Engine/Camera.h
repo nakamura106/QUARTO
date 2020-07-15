@@ -49,7 +49,7 @@ private:
 		/* ˆÚ“®‘¬“x */
 		//D3DXVECTOR3 m_Velocity;
 
-		bool m_startflag;
+		bool start_flag;
 	}camera_data_;
 
 public:
@@ -77,7 +77,7 @@ public:
 
 		camera_data_.speed = walk_speed_;
 
-		camera_data_.m_startflag = false;
+		camera_data_.start_flag = false;
 
 		D3DXMatrixIdentity(&camera_data_.mat_view);
 	}

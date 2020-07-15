@@ -64,19 +64,19 @@ void Camera::MouseRotate()
 
 void Camera::StickRotate()
 {
-	if (THE_INPUT->IsButtonPush(THE_INPUT->R_LeftStick))
+	if (THE_INPUT->IsButtonPush(THE_INPUT->R_LEFT_STICK))
 	{
 		camera_data_.yaw -= 2.0f;
 	}
-	if (THE_INPUT->IsButtonPush(THE_INPUT->R_RightStick))
+	if (THE_INPUT->IsButtonPush(THE_INPUT->R_RIGHT_STICK))
 	{
 		camera_data_.yaw += 2.0f;
 	}
-	if (THE_INPUT->IsButtonPush(THE_INPUT->R_UpStick))
+	if (THE_INPUT->IsButtonPush(THE_INPUT->R_UP_STICK))
 	{
 		camera_data_.pitch += 2.0f;
 	}
-	if (THE_INPUT->IsButtonPush(THE_INPUT->R_DownStick))
+	if (THE_INPUT->IsButtonPush(THE_INPUT->R_DOWN_STICK))
 	{
 		camera_data_.pitch -= 2.0f;
 	}

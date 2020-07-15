@@ -10,9 +10,9 @@ public:
 	/** @brief マウスボタンの種類 */
 	enum MouseButton
 	{
-		Left,		//!< 左
-		Right,		//!< 右
-		Center,		//!< 真ん中
+		LEFT,		//!< 左
+		RIGHT,		//!< 右
+		CENTER,		//!< 真ん中
 	};
 
 	// @brife キーの種類
@@ -41,36 +41,36 @@ public:
 
 	enum ButtonKind
 	{
-		AButton,
-		BButton,
-		XButton,
-		YButton,
-		LeftBButton,
-		RightBButton,
-		LeftTButton,
-		RightTButton,
-		L_UpStick,
-		L_DownStick,
-		L_LeftStick,
-		L_RightStick,
-		R_UpStick,
-		R_DownStick,
-		R_LeftStick,
-		R_RightStick,
-		UpButton,
-		DownButton,
-		LeftButton,
-		RightButton,
-		ButtonKindMax,
+		A_BUTTON,
+		B_BUTTON,
+		X_BUTTON,
+		Y_BUTTON,
+		LEFT_B_BUTTON,
+		RIGHT_B_BUTTON,
+		LEFT_T_BUTTON,
+		RIGHT_T_BUTTON,
+		L_UP_STICK,
+		L_DOWN_STICK,
+		L_LEFT_STICK,
+		L_RIGHT_STICK,
+		R_UP_STICK,
+		R_DOWN_STICK,
+		R_LEFT_STICK,
+		R_RIGHT_STICK,
+		UP_BUTTON,
+		DOWN_BUTTON,
+		LEFT_BUTTON,
+		RIGHT_BUTTON,
+		BUTTON_KIND_MAX,
 	};
 
 	enum ButtonState
 	{
-		ButtonStateNone,
-		ButtonStateDown,
-		ButtonStatePush,
-		ButtonStateUp,
-		ButtonStateMax,
+		BUTTON_STATE_NONE,
+		BUTTON_STATE_DOWN,
+		BUTTON_STATE_PUSH,
+		BUTTON_STATE_UP,
+		BUTTON_STATE_MAX,
 	};
 
 	enum INPUT_STATE
@@ -83,8 +83,8 @@ public:
 
 	struct DeviceEnumParameter
 	{
-		LPDIRECTINPUTDEVICE8* GamePadDevice;
-		int FindCount;
+		LPDIRECTINPUTDEVICE8* gamepad_device_ptr;
+		int find_count;
 	};
 	
 public:
@@ -115,7 +115,7 @@ public:
 	* @return 判定結果、押されているならtrue
 	* @param[in] key 判定したいキー
 	*/
-	bool GetKey(KEY_INFO key);
+	bool GetKey(KEY_INFO key_);
 
 	/**
 	* @brief 入力情報の更新@n
@@ -132,7 +132,7 @@ public:
 	* @return 判定結果、押された瞬間ならtrue
 	* @param[in] key 判定したいキー
 	*/
-	bool GetKeyDown(KEY_INFO key);
+	bool GetKeyDown(KEY_INFO key_);
 
 	/**
 	* @brief キーが離された瞬間の判定関数@n
@@ -140,7 +140,7 @@ public:
 	* @return 判定結果、離されたならtrue
 	* @param[in] key 判定したいキー
 	*/
-	bool GetKeyUp(KEY_INFO key);
+	bool GetKeyUp(KEY_INFO key_);
 
 	/**
 	* @brief クリックした瞬間判定関数@n
@@ -148,7 +148,7 @@ public:
 	* @return 判定結果(押された瞬間ならtrue)
 	* @param[in] button_type 判定したいボタンの種類
 	*/
-	bool OnMouseDown(MouseButton button_type);
+	bool OnMouseDown(MouseButton button_type_);
 
 	/**
 	* @brief クリック中判定関数@n
@@ -156,7 +156,7 @@ public:
 	* @return 判定結果(クリック中瞬間ならtrue)
 	* @param[in] button_type 判定したいボタンの種類
 	*/
-	bool OnMousePush(MouseButton button_type);
+	bool OnMousePush(MouseButton button_type_);
 
 	/**
 	* @brief クリック終了判定関数@n
@@ -164,19 +164,19 @@ public:
 	* @return 判定結果(クリックをやめた瞬間ならtrue)
 	* @param[in] button_type 判定したいボタンの種類
 	*/
-	bool OnMouseUp(MouseButton button_type);
+	bool OnMouseUp(MouseButton button_type_);
 
 	/** @brief マウスの座標取得関数 */
 	D3DXVECTOR2 GetMousePos();
 
-	bool IsButtonPush(ButtonKind button);
-	bool IsButtonUp(ButtonKind button);
-	bool IsButtonDown(ButtonKind button);
+	bool IsButtonPush(ButtonKind button_);
+	bool IsButtonUp(ButtonKind button_);
+	bool IsButtonDown(ButtonKind button_);
 
 	private:
 		BOOL StartGamePadControl();
-		BOOL SetUpGamePadProperty(LPDIRECTINPUTDEVICE8 device);
-		static BOOL CALLBACK DeviceFindCallBack(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);		
+		BOOL SetUpGamePadProperty(LPDIRECTINPUTDEVICE8 device_);
+		static BOOL CALLBACK DeviceFindCallBack(LPCDIDEVICEINSTANCE lpddi_, LPVOID pvRef_);		
 		/**
 	* @brief キーボードの入力情報の更新@n
 	* デバイスの入力情報の更新を行います@n
@@ -191,20 +191,20 @@ public:
 		bool CreateKeyboardDevice();
 
 	private:
-		LPDIRECTINPUT8 InputInterface;
+		LPDIRECTINPUT8 input_interface_;
 
-		LPDIRECTINPUTDEVICE8 KeyDevice;
-		LPDIRECTINPUTDEVICE8 MouseDevice;		//!< DIRECTINPUTDEVICE8のポインタ
-		LPDIRECTINPUTDEVICE8 GamePadDevice;
+		LPDIRECTINPUTDEVICE8 key_device_;
+		LPDIRECTINPUTDEVICE8 mouse_device_;		//!< DIRECTINPUTDEVICE8のポインタ
+		LPDIRECTINPUTDEVICE8 gamepad_device_;
 
-		DIMOUSESTATE PrevMouseState;			//!< マウスの１フレーム前の入力情報
-		DIMOUSESTATE CurrentMouseState;		//!< マウスの現在の入力情報
+		DIMOUSESTATE prev_mouse_state_;			//!< マウスの１フレーム前の入力情報
+		DIMOUSESTATE curr_mouse_state_;		//!< マウスの現在の入力情報
 
-		D3DXVECTOR2 MousePos;
-		D3DXVECTOR2 MouseMoveVec;
+		D3DXVECTOR2 mouse_pos_;
+		D3DXVECTOR2 mouse_move_vec_;
 
 
-		ButtonState ButtonStates[ButtonKind::ButtonKindMax];
+		ButtonState ButtonStates[ButtonKind::BUTTON_KIND_MAX];
 
 		INPUT_STATE InputState[KEY_INFO::MAX_KEY_INFO];
 

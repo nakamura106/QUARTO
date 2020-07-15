@@ -30,30 +30,30 @@ struct Bone
 //マテリアルの情報
 struct MaterialData
 {
-	Graphics::TEXTURE_DATA textureData;	// テクスチャ―
+	Graphics::TEXTURE_DATA texture_data;	// テクスチャ―
 	D3DMATERIAL9 material;		// マテリアル
 };
 
 //メッシュの情報
 struct MeshData {
 	//ポリゴンの数
-	int polygonCount;
+	int polygon_count;
 	//頂点の数
-	int vertexCount;
+	int vertex_count;
 	//頂点インデックスの数
-	int indexCount;
+	int index_count;
 	// 1頂点辺りのサイズ
-	int vertexStride;
+	int vertex_stride;
 	//マテリアル番号
-	int materialIndex;
+	int material_index;
 
-	int uvSetCount;
+	int uv_set_count;
 	//頂点
 	VERTEX_3D* vertex;
 	//頂点バッファ
-	IDirect3DVertexBuffer9* pVB;
+	IDirect3DVertexBuffer9* vb_ptr;
 	//インデックスバッファ
-	IDirect3DIndexBuffer9* pIB;
+	IDirect3DIndexBuffer9* ib_ptr;
 };
 static const int BONE_MAX = 256;
 
@@ -62,11 +62,11 @@ struct Motion
 {
 	Motion()
 	{
-		ZeroMemory(pKey, sizeof(pKey));
+		ZeroMemory(key_ptr, sizeof(key_ptr));
 	}
 
-	UINT		numFrame;		// フレーム数	
-	D3DXMATRIX* pKey[BONE_MAX];	// キーフレーム
+	UINT		num_frame;		// フレーム数	
+	D3DXMATRIX* key_ptr[BONE_MAX];	// キーフレーム
 };
 
 
@@ -74,18 +74,18 @@ struct Motion
 //FBXの情報
 struct FbxInfo {
 	//メッシュ
-	MeshData* pMesh;
+	MeshData* mesh_ptr;
 	//メッシュの数
-	int meshcount;
+	int mesh_count;
 	//マテリアル
-	MaterialData* pMaterial;
+	MaterialData* material_ptr;
 	//マテリアルの数
-	int materialcount;
+	int material_count;
 
 	Bone bone[BONE_MAX];	// ボーン情報
-	int bonecount;
-	int	startFrame;		// 開始フレーム
-	std::map<std::string, Motion>* pMotion;		// モーション
+	int bone_count;
+	int	start_frame;		// 開始フレーム
+	std::map<std::string, Motion>* motion_ptr;		// モーション
 	D3DXMATRIX						world;			// ワールドマトリックス
 };
 
@@ -101,15 +101,15 @@ struct FBXMeshData
 enum class Object
 {
 	PLAYER,
-	MaxObject
+	MAX_OBJECT
 };
 
 class Fbx
 {
 public:
 	/*Fbx(D3DXVECTOR3 Pos, D3DXVECTOR3 Scale):
-		m_Pos(Pos),
-		m_Scale(Scale)
+		pos_(Pos),
+		scale_(Scale)
 	{}*/
 
 	Fbx() {}
@@ -119,7 +119,7 @@ public:
 
 
 	//FBX準備
-	FBXMeshData LoadFbx(const char* file_name);
+	FBXMeshData LoadFbx(const char* file_name_);
 
 	bool LoadMesh(MeshData* pMeshData_, FbxMesh* pMesh_);
 
@@ -147,13 +147,13 @@ public:
 	//アニメーション無し
 	void RenderFbxMesh(FBXMeshData* pData_);
 
-	void DrawModel(FbxInfo* pModel);
+	void DrawModel(FbxInfo* pModel_);
 
 	void Skinning(FBXMeshData* pData_);
 
 	void MatrixInterporate(D3DXMATRIX& out_, D3DXMATRIX& A_, D3DXMATRIX B_, float rate_);
 
-	void ReleaseModel(FbxInfo* pModel);
+	void ReleaseModel(FbxInfo* pModel_);
 
 	void Animate(FBXMeshData* pData_, float sec_);
 
@@ -163,10 +163,10 @@ private:
 
 
 
-	D3DXVECTOR3 m_Pos;
-	D3DXVECTOR3 m_Scale;
+	D3DXVECTOR3 pos_;
+	D3DXVECTOR3 scale_;
 
-	char m_RootPath[MAX_PATH]; // ファイルのパス
+	char root_path_[MAX_PATH]; // ファイルのパス
 };
 
 #endif

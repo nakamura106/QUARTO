@@ -5,9 +5,9 @@
 
 #pragma region 読み込み
 // マテリアル情報の初期化
-void InitMaterial(MaterialData* pMaterial, int materialNum)
+void InitMaterial(MaterialData* material_ptr_, int material_num_)
 {
-	ZeroMemory(pMaterial, sizeof(MaterialData) * materialNum);
+	ZeroMemory(material_ptr_, sizeof(MaterialData) * material_num_);
 
 	D3DMATERIAL9 material;
 	//	材質設定
@@ -33,24 +33,24 @@ void InitMaterial(MaterialData* pMaterial, int materialNum)
 	material.Emissive.b = 0.0f;
 	material.Emissive.a = 0.0f;
 
-	for (int i = 0; i < materialNum; i++)
+	for (int i = 0; i < material_num_; i++)
 	{
-		pMaterial[i].material = material;
+		material_ptr_[i].material = material;
 	}
 }
 
-FBXMeshData Fbx::LoadFbx(const char* file_name)
+FBXMeshData Fbx::LoadFbx(const char* file_name_)
 {
 	FBXMeshData fbxMeshData;
 	ZeroMemory(&fbxMeshData, sizeof(fbxMeshData));
 
-	strcpy_s(m_RootPath, file_name);
+	strcpy_s(root_path_, file_name_);
 	UINT i;
-	for (i = strlen(m_RootPath); 0 < i; i--)
+	for (i = strlen(root_path_); 0 < i; i--)
 	{
-		if (m_RootPath[i] == '/') break;
+		if (root_path_[i] == '/') break;
 	}
-	m_RootPath[i] = '\0';
+	root_path_[i] = '\0';
 
 	//FBXのマネージャー作成
 	FbxManager* m_manager = FbxManager::Create();
@@ -62,7 +62,7 @@ FBXMeshData Fbx::LoadFbx(const char* file_name)
 	FbxIOSettings* ios = FbxIOSettings::Create(m_manager, IOSROOT);
 
 	//filePathに指定したファイルを読み込む
-	importer->Initialize(file_name);
+	importer->Initialize(file_name_);
 	//シーンにインポートしたファイルを渡す
 	bool result = importer->Import(m_scene);
 	//インポーターの役目は終わりなので解放する
@@ -87,11 +87,11 @@ FBXMeshData Fbx::LoadFbx(const char* file_name)
 
 
 	D3DXMatrixIdentity(&fbxMeshData.fbxinfo.world);
-	fbxMeshData.fbxinfo.meshcount = meshcount;
-	fbxMeshData.fbxinfo.pMesh = pMeshData;
-	fbxMeshData.fbxinfo.materialcount = materialcount;
-	fbxMeshData.fbxinfo.pMaterial = pMaterialData;
-	fbxMeshData.fbxinfo.bonecount = 0;
+	fbxMeshData.fbxinfo.mesh_count = meshcount;
+	fbxMeshData.fbxinfo.mesh_ptr = pMeshData;
+	fbxMeshData.fbxinfo.material_count = materialcount;
+	fbxMeshData.fbxinfo.material_ptr = pMaterialData;
+	fbxMeshData.fbxinfo.bone_count = 0;
 	ZeroMemory(fbxMeshData.fbxinfo.bone, sizeof(fbxMeshData.fbxinfo.bone));
 
 	//	モーション情報取得
@@ -107,10 +107,10 @@ FBXMeshData Fbx::LoadFbx(const char* file_name)
 		FbxLongLong fps60 = FbxTime::GetOneFrameValue(FbxTime::eFrames60);
 		StartFrame = (int)(start / fps60);
 
-		fbxMeshData.fbxinfo.pMotion = new std::map<std::string, Motion>();
-		(*fbxMeshData.fbxinfo.pMotion)["default"].numFrame = (int)((stop - start) / fps60);
+		fbxMeshData.fbxinfo.motion_ptr = new std::map<std::string, Motion>();
+		(*fbxMeshData.fbxinfo.motion_ptr)["default"].num_frame = (int)((stop - start) / fps60);
 	}
-	fbxMeshData.fbxinfo.startFrame = StartFrame;
+	fbxMeshData.fbxinfo.start_frame = StartFrame;
 
 	// メッシュ単位で展開していく
 	for (int i = 0; i < meshcount; i++)
@@ -120,7 +120,7 @@ FBXMeshData Fbx::LoadFbx(const char* file_name)
 		LoadMesh(&pMeshData[i], pMesh);
 		GetTextureInfo(&pMaterialData[i], pMesh);
 		GetBone(&fbxMeshData.fbxinfo, &pMeshData[i], pMesh);
-		pMeshData[i].materialIndex = i;
+		pMeshData[i].material_index = i;
 	}
 
 
@@ -161,12 +161,12 @@ bool Fbx::LoadMesh(MeshData * pMeshData_, FbxMesh * pMesh_)
 	UINT size = (UINT)(vertexNum * sizeof(VERTEX_3D));
 	VERTEX_3D* vertex;
 	// バッファをロックしてデータを書き込む
-	pMeshData_->pVB->Lock(0, size, (void**)& vertex, 0);
+	pMeshData_->vb_ptr->Lock(0, size, (void**)& vertex, 0);
 
 	pMeshData_->vertex = (VERTEX_3D*)malloc(size);
 	memcpy(pMeshData_->vertex, vertex, size);
 
-	pMeshData_->pVB->Unlock();
+	pMeshData_->vb_ptr->Unlock();
 
 	return true;
 }
@@ -177,13 +177,13 @@ void Fbx::GetIndeces(MeshData * pMeshData_, FbxMesh * pMesh_)
 	int polyCount = pMesh_->GetPolygonCount();
 	UINT size = (UINT)((polyCount * 3) * sizeof(UINT16));
 
-	pMeshData_->polygonCount = (UINT)polyCount;
-	pMeshData_->indexCount = (UINT)(polyCount * 3);
-	pMeshData_->pIB = THE_GRAPHICS->CreateIndexBuffer(NULL, size);
+	pMeshData_->polygon_count = (UINT)polyCount;
+	pMeshData_->index_count = (UINT)(polyCount * 3);
+	pMeshData_->ib_ptr = THE_GRAPHICS->CreateIndexBuffer(NULL, size);
 
 	UINT16* pIndeces;
 	// バッファをロックしてデータを書き込む
-	pMeshData_->pIB->Lock(0, size, (void**)& pIndeces, 0);
+	pMeshData_->ib_ptr->Lock(0, size, (void**)& pIndeces, 0);
 
 	for (int polyIdx = 0; polyIdx < polyCount; polyIdx++)
 	{
@@ -191,7 +191,7 @@ void Fbx::GetIndeces(MeshData * pMeshData_, FbxMesh * pMesh_)
 		pIndeces[polyIdx * 3 + 1] = polyIdx * 3 + 1;
 		pIndeces[polyIdx * 3 + 2] = polyIdx * 3 + 0;
 	}
-	pMeshData_->pIB->Unlock();
+	pMeshData_->ib_ptr->Unlock();
 }
 //頂点情報
 void Fbx::GetVertex(MeshData * pMeshData_, FbxMesh * pMesh_) {
@@ -212,13 +212,13 @@ void Fbx::GetVertex(MeshData * pMeshData_, FbxMesh * pMesh_) {
 		vtx[v] = TRS.MultT(vtx[v]);
 	}
 
-	pMeshData_->vertexCount = (UINT)vertexCount;
-	pMeshData_->vertexStride = sizeof(VERTEX_3D);
-	pMeshData_->pVB = THE_GRAPHICS->CreateVertexBuffer(NULL, size);
+	pMeshData_->vertex_count = (UINT)vertexCount;
+	pMeshData_->vertex_stride = sizeof(VERTEX_3D);
+	pMeshData_->vb_ptr = THE_GRAPHICS->CreateVertexBuffer(NULL, size);
 
 	VERTEX_3D* pVertex;
 	// バッファをロックしてデータを書き込む
-	pMeshData_->pVB->Lock(0, size, (void**)& pVertex, 0);
+	pMeshData_->vb_ptr->Lock(0, size, (void**)& pVertex, 0);
 	int* pIndex = pMesh_->GetPolygonVertices();
 	for (int vIdx = 0; vIdx < vertexCount; vIdx++)
 	{
@@ -235,7 +235,7 @@ void Fbx::GetVertex(MeshData * pMeshData_, FbxMesh * pMesh_) {
 		ZeroMemory(pVertex[vIdx].weight, sizeof(pVertex[vIdx].weight));
 	}
 
-	pMeshData_->pVB->Unlock();
+	pMeshData_->vb_ptr->Unlock();
 
 }
 //法線情報取得
@@ -245,10 +245,10 @@ void Fbx::GetNormal(MeshData * pMeshData_, FbxMesh * pMesh_) {
 	//法線を取得
 	pMesh_->GetPolygonVertexNormals(normals);
 
-	UINT size = pMeshData_->vertexCount * sizeof(VERTEX_3D);
+	UINT size = pMeshData_->vertex_count * sizeof(VERTEX_3D);
 	VERTEX_3D* pVertex;
 	// バッファをロックしてデータを書き込む
-	pMeshData_->pVB->Lock(0, size, (void**)& pVertex, 0);
+	pMeshData_->vb_ptr->Lock(0, size, (void**)& pVertex, 0);
 
 	//法線の数を取得
 	//int normalCount = normals.Size();
@@ -260,7 +260,7 @@ void Fbx::GetNormal(MeshData * pMeshData_, FbxMesh * pMesh_) {
 		pVertex[vtxIdx].nor.y = (float)normal[1];
 		pVertex[vtxIdx].nor.z = (float)normal[2];
 	}
-	pMeshData_->pVB->Unlock();
+	pMeshData_->vb_ptr->Unlock();
 
 }
 //UV情報取得
@@ -273,11 +273,11 @@ void Fbx::GetUV(MeshData * pMeshData_, FbxMesh * pMesh_) {
 	FbxArray<FbxVector2> uvSets;
 	pMesh_->GetPolygonVertexUVs(uvsetName.GetStringAt(0), uvSets);
 
-	UINT size = pMeshData_->vertexCount * sizeof(VERTEX_3D);
+	UINT size = pMeshData_->vertex_count * sizeof(VERTEX_3D);
 
 	VERTEX_3D* pVertex;
 	// バッファをロックしてデータを書き込む
-	pMeshData_->pVB->Lock(0, size, (void**)& pVertex, 0);
+	pMeshData_->vb_ptr->Lock(0, size, (void**)& pVertex, 0);
 	for (int vtxIdx = 0; vtxIdx < uvSets.Size(); vtxIdx++)
 	{
 		FbxVector2& uvSet = uvSets[vtxIdx];
@@ -285,7 +285,7 @@ void Fbx::GetUV(MeshData * pMeshData_, FbxMesh * pMesh_) {
 		pVertex[vtxIdx].u = (float)uvSet[0];
 		pVertex[vtxIdx].v = (float)(1.0 - uvSet[1]);
 	}
-	pMeshData_->pVB->Unlock();
+	pMeshData_->vb_ptr->Unlock();
 }
 //カラー情報取得
 void Fbx::GetColor(MeshData * pMeshData_, FbxMesh * pMesh_)
@@ -302,10 +302,10 @@ void Fbx::GetColor(MeshData * pMeshData_, FbxMesh * pMesh_)
 	{
 		if (refMode == FbxLayerElement::eIndexToDirect)
 		{
-			UINT size = pMeshData_->vertexCount * sizeof(VERTEX_3D);
+			UINT size = pMeshData_->vertex_count * sizeof(VERTEX_3D);
 			VERTEX_3D* pVertex;
 			// バッファをロックしてデータを書き込む
-			pMeshData_->pVB->Lock(0, size, (void**)& pVertex, 0);
+			pMeshData_->vb_ptr->Lock(0, size, (void**)& pVertex, 0);
 
 			FbxLayerElementArrayTemplate<FbxColor>& colors = pColor->GetDirectArray();
 			FbxLayerElementArrayTemplate<int>& indeces = pColor->GetIndexArray();
@@ -319,14 +319,14 @@ void Fbx::GetColor(MeshData * pMeshData_, FbxMesh * pMesh_)
 
 				pVertex[i].col = (a << 24) + (r << 16) + (g << 8) + (b);
 			}
-			pMeshData_->pVB->Unlock();
+			pMeshData_->vb_ptr->Unlock();
 		}
 	}
 }
 //骨情報検索
 int Fbx::FindBone(FbxInfo * pModel_, const char* pName_)
 {
-	for (UINT boneIdx = 0; boneIdx < pModel_->bonecount; boneIdx++)
+	for (UINT boneIdx = 0; boneIdx < pModel_->bone_count; boneIdx++)
 	{
 		if (strcmp(pModel_->bone[boneIdx].name, pName_) == 0)
 		{
@@ -344,12 +344,12 @@ void Fbx::GetBone(FbxInfo * pModel_, MeshData * pMeshData_, FbxMesh * pMesh_)
 	{
 		return;
 	}
-	int vertexcount = pMeshData_->vertexCount;
+	int vertexcount = pMeshData_->vertex_count;
 	UINT size = (UINT)(vertexcount * sizeof(VERTEX_3D));
 
 	VERTEX_3D* pVertex;
 	// バッファをロックしてデータを書き込む
-	pMeshData_->pVB->Lock(0, size, (void**)& pVertex, 0);
+	pMeshData_->vb_ptr->Lock(0, size, (void**)& pVertex, 0);
 
 	FbxSkin* pSkin = (FbxSkin*)pMesh_->GetDeformer(0, FbxDeformer::eSkin);
 	// ボーン数
@@ -379,9 +379,9 @@ void Fbx::GetBone(FbxInfo * pModel_, MeshData * pMeshData_, FbxMesh * pMesh_)
 		}
 		else
 		{
-			bone_no = pModel_->bonecount;
+			bone_no = pModel_->bone_count;
 			pBone = &pModel_->bone[bone_no];
-			pModel_->bonecount++;
+			pModel_->bone_count++;
 
 			strcpy_s(pBone->name, pName);
 			//	オフセット行列作成
@@ -457,18 +457,18 @@ void Fbx::GetBone(FbxInfo * pModel_, MeshData * pMeshData_, FbxMesh * pMesh_)
 			pVertex[vtxIdx].weight[weightCount] /= n;
 		}
 	}
-	pMeshData_->pVB->Unlock();
+	pMeshData_->vb_ptr->Unlock();
 }
 
 void Fbx::GetKeyFrames(FbxInfo * pModel_, std::string name_, int bone_, FbxNode * pBoneNode_)
 {
 	//	メモリ確保
-	Motion* pMotion = &(*pModel_->pMotion)[name_];
-	pMotion->pKey[bone_] = (D3DXMATRIX*)malloc(sizeof(D3DXMATRIX) * (pMotion->numFrame + 1));
+	Motion* pMotion = &(*pModel_->motion_ptr)[name_];
+	pMotion->key_ptr[bone_] = (D3DXMATRIX*)malloc(sizeof(D3DXMATRIX) * (pMotion->num_frame + 1));
 
-	double time = (double)pModel_->startFrame * (1.0 / 60);
+	double time = (double)pModel_->start_frame * (1.0 / 60);
 	FbxTime T;
-	for (UINT f = 0; f < pMotion->numFrame; f++)
+	for (UINT f = 0; f < pMotion->num_frame; f++)
 	{
 		T.SetSecondDouble(time);
 		//	T秒の姿勢行列をGet
@@ -482,7 +482,7 @@ void Fbx::GetKeyFrames(FbxInfo * pModel_, std::string name_, int bone_, FbxNode 
 		FbxDouble* mat = (FbxDouble*)m;
 		for (int i = 0; i < 16; i++)
 		{
-			pMotion->pKey[bone_][f].m[i / 4][i % 4] = (float)mat[i];
+			pMotion->key_ptr[bone_][f].m[i / 4][i % 4] = (float)mat[i];
 		}
 
 		time += 1.0 / 60.0;
@@ -550,11 +550,11 @@ void Fbx::GetTextureInfo(MaterialData * pMaterialData_, FbxMesh * pMesh_) {
 			}
 			else
 			{
-				strcpy_s(path, m_RootPath);
+				strcpy_s(path, root_path_);
 				strcat_s(path, "/texture/");
 				strcat_s(path, pFileName);
 			}
-			THE_GRAPHICS->LoadTexture(path, &pMaterialData_->textureData);
+			THE_GRAPHICS->LoadTexture(path, &pMaterialData_->texture_data);
 
 			FbxFree(pFileName);
 		}
@@ -574,43 +574,43 @@ void Fbx::RenderFbxMesh(FBXMeshData * pData_)
 void Fbx::DrawModel(FbxInfo * pModel)
 {
 	if (pModel == NULL) return;
-	if (pModel->materialcount == 0) return;
+	if (pModel->material_count == 0) return;
 
 	IDirect3DDevice9 * pDevice = THE_GRAPHICS->GetD3DDevice();
 	pDevice->SetTransform(D3DTS_WORLD, &pModel->world);
 
-	for (UINT matIdx = 0; matIdx < pModel->materialcount; matIdx++)
+	for (UINT matIdx = 0; matIdx < pModel->material_count; matIdx++)
 	{
-		MaterialData* pMaterial = &pModel->pMaterial[matIdx];
+		MaterialData* pMaterial = &pModel->material_ptr[matIdx];
 		// テクスチャーの設定
-		pDevice->SetTexture(0, pMaterial->textureData.Texture);
+		pDevice->SetTexture(0, pMaterial->texture_data.Texture);
 
 		pDevice->SetMaterial(&pMaterial->material);
-		for (UINT meshIdx = 0; meshIdx < pModel->materialcount; meshIdx++)
+		for (UINT meshIdx = 0; meshIdx < pModel->material_count; meshIdx++)
 		{
-			MeshData* pMesh = &pModel->pMesh[meshIdx];
-			if (matIdx != pMesh->materialIndex)
+			MeshData* pMesh = &pModel->mesh_ptr[meshIdx];
+			if (matIdx != pMesh->material_index)
 			{
 				continue;
 			}
 
 			// 頂点バッファの設定
-			pDevice->SetStreamSource(0, pMesh->pVB, 0, pMesh->vertexStride);
+			pDevice->SetStreamSource(0, pMesh->vb_ptr, 0, pMesh->vertex_stride);
 
 			// 頂点フォーマットの指定
 			pDevice->SetFVF(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1 | D3DFVF_DIFFUSE);
 
-			if (pMesh->pIB)
+			if (pMesh->ib_ptr)
 			{
 				// インデックスバッファの設定
-				pDevice->SetIndices(pMesh->pIB);
+				pDevice->SetIndices(pMesh->ib_ptr);
 				// 描画
-				pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, pMesh->vertexCount, 0, pMesh->polygonCount);
+				pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, pMesh->vertex_count, 0, pMesh->polygon_count);
 			}
 			else
 			{
 				// 描画
-				pDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, pMesh->polygonCount);
+				pDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, pMesh->polygon_count);
 			}
 		}
 	}
@@ -618,39 +618,39 @@ void Fbx::DrawModel(FbxInfo * pModel)
 
 void Fbx::Skinning(FBXMeshData * pData_)
 {
-	if (!pData_->fbxinfo.pMotion) return;
+	if (!pData_->fbxinfo.motion_ptr) return;
 
-	Motion* pMotion = &(*pData_->fbxinfo.pMotion)[pData_->motion];
+	Motion* pMotion = &(*pData_->fbxinfo.motion_ptr)[pData_->motion];
 	if (pMotion == nullptr) return;
-	if (pMotion->numFrame < 0) return;
+	if (pMotion->num_frame < 0) return;
 
 	float Frame = pData_->frame;
 	//	配列用変数
 	int f = (int)Frame;
 	//	行列準備
 	D3DXMATRIX KeyMatrix[256];
-	for (UINT b = 0; b < pData_->fbxinfo.bonecount; b++)
+	for (UINT b = 0; b < pData_->fbxinfo.bone_count; b++)
 	{
-		if (!pMotion->pKey[b]) continue;
+		if (!pMotion->key_ptr[b]) continue;
 		//	行列補間
 		D3DXMATRIX m;
-		MatrixInterporate(m, pMotion->pKey[b][f], pMotion->pKey[b][f + 1], Frame - (int)Frame);
+		MatrixInterporate(m, pMotion->key_ptr[b][f], pMotion->key_ptr[b][f + 1], Frame - (int)Frame);
 		pData_->fbxinfo.bone[b].transform = m;
 		//	キーフレーム
 		KeyMatrix[b] = pData_->fbxinfo.bone[b].offset * m;
 	}
 
 	//	頂点変形
-	for (UINT meshIdx = 0; meshIdx < pData_->fbxinfo.meshcount; meshIdx++)
+	for (UINT meshIdx = 0; meshIdx < pData_->fbxinfo.mesh_count; meshIdx++)
 	{
-		MeshData* pMeshData = &pData_->fbxinfo.pMesh[meshIdx];
+		MeshData* pMeshData = &pData_->fbxinfo.mesh_ptr[meshIdx];
 		VERTEX_3D* pSrcVertex = pMeshData->vertex;
 
-		UINT size = (UINT)(pMeshData->vertexCount * sizeof(VERTEX_3D));
+		UINT size = (UINT)(pMeshData->vertex_count * sizeof(VERTEX_3D));
 		VERTEX_3D* pVertex;
 		// バッファをロックしてデータを書き込む
-		pMeshData->pVB->Lock(0, size, (void**)& pVertex, 0);
-		for (UINT v = 0; v < pMeshData->vertexCount; v++)
+		pMeshData->vb_ptr->Lock(0, size, (void**)& pVertex, 0);
+		for (UINT v = 0; v < pMeshData->vertex_count; v++)
 		{
 			//	頂点 * ボーン行列
 			// b = v番目の頂点の影響ボーン[n]
@@ -684,7 +684,7 @@ void Fbx::Skinning(FBXMeshData * pData_)
 				pVertex[v].nor.z += (nx * KeyMatrix[b]._13 + ny * KeyMatrix[b]._23 + nz * KeyMatrix[b]._33) * pVertex[v].weight[n];
 			}
 		}
-		pMeshData->pVB->Unlock();
+		pMeshData->vb_ptr->Unlock();
 	}
 }
 
@@ -697,33 +697,33 @@ void Fbx::ReleaseModel(FbxInfo * pModel)
 {
 	if (pModel == nullptr) return;
 
-	for (UINT i = 0; i < pModel->meshcount; i++)
+	for (UINT i = 0; i < pModel->mesh_count; i++)
 	{
-		SAFE_RELEASE(pModel->pMesh[i].pVB);
-		SAFE_RELEASE(pModel->pMesh[i].pIB);
-		free(pModel->pMesh[i].vertex);
+		SAFE_RELEASE(pModel->mesh_ptr[i].vb_ptr);
+		SAFE_RELEASE(pModel->mesh_ptr[i].ib_ptr);
+		free(pModel->mesh_ptr[i].vertex);
 	}
-	for (UINT i = 0; i < pModel->materialcount; i++)
+	for (UINT i = 0; i < pModel->material_count; i++)
 	{
-		THE_GRAPHICS->ReleaseTexture(&pModel->pMaterial[i].textureData);
+		THE_GRAPHICS->ReleaseTexture(&pModel->material_ptr[i].texture_data);
 	}
-	if (pModel->pMotion)
+	if (pModel->motion_ptr)
 	{
 		std::map<std::string, Motion>::iterator it;
-		for (it = pModel->pMotion->begin(); it != pModel->pMotion->end(); it++)
+		for (it = pModel->motion_ptr->begin(); it != pModel->motion_ptr->end(); it++)
 		{
 			for (int i = 0; i < 256; i++)
 			{
-				if (it->second.pKey[i])
+				if (it->second.key_ptr[i])
 				{
-					free(it->second.pKey[i]);
+					free(it->second.key_ptr[i]);
 				}
 			}
 		}
-		delete pModel->pMotion;
+		delete pModel->motion_ptr;
 	}
-	free(pModel->pMesh);
-	free(pModel->pMaterial);
+	free(pModel->mesh_ptr);
+	free(pModel->material_ptr);
 
 	ZeroMemory(pModel, sizeof(FbxInfo));
 }
@@ -731,12 +731,12 @@ void Fbx::ReleaseModel(FbxInfo * pModel)
 void Fbx::Animate(FBXMeshData * pData_, float sec_)
 {
 	if (pData_ == nullptr) return;
-	if (pData_->fbxinfo.pMotion == nullptr) return;
+	if (pData_->fbxinfo.motion_ptr == nullptr) return;
 	//	モーション時間の更新
 	pData_->frame += sec_ * 120.0f;
 
 	//	ループチェック
-	if (pData_->frame >= (*pData_->fbxinfo.pMotion)[pData_->motion].numFrame - 1)
+	if (pData_->frame >= (*pData_->fbxinfo.motion_ptr)[pData_->motion].num_frame - 1)
 	{
 		// ループ
 		pData_->frame = 0;

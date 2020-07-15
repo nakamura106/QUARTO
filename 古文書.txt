@@ -1,0 +1,59 @@
+コード規約
+
+●基本
+スネークケース
+・test_data
+
+●グローバル変数
+使用禁止
+原酒
+
+●ローカル変数
+スネークケース
+
+●引数
+スネークケース + 末尾に_
+
+●定数
+すべて大文字
+
+●enum
+すべて大文字 + _
+
+●フラグ変数
+is_変数名、has_変数名
+
+●構造体
+st_構造体名
+・st_Size
+
+●メンバ変数(クラス)
+m_変数名
+
+●メンバメソッド
+アッパーキャメル
+・TestData
+
+◆アプリパート
+position : pos
+command : cmd
+value : val
+image : img
+manager : mgr
+message : msg
+animation : ani
+source : src
+library : lib
+object : obj
+control : ctl
+status : sta
+
+◆エンジンパート
+buffer : buf
+configuration : conf
+define : def
+string : str
+length : len
+pointer : ptr
+current : curr
+

@@ -3,83 +3,83 @@
 
 #include <d3dx9.h>
 
-class CAMERA
+class Camera
 {
 private:
 	/* カメラの移動速度 Walk */
-	const float m_WalkSpeed;
+	const float walk_speed_;
 
 	/* カメラの移動速度 Sprint */
-	const float m_SprintSpeed;
+	const float sprint_speed_;
 
 	struct CAMERA_DATA {
 
 		/* カメラの位置 */
-		D3DXVECTOR3 m_CameraPos;
+		D3DXVECTOR3 camera_pos;
 
 		/* 注視点 */
-		D3DXVECTOR3 m_EyePos;
+		D3DXVECTOR3 eye_pos;
 
 		/* カメラの上向きのベクトル */
-		D3DXVECTOR3 m_CameraUp;
+		D3DXVECTOR3 camera_up;
 
-		D3DXVECTOR3 m_Forward;
+		D3DXVECTOR3 forward;
 
 		/* カメラのビュー情報を保存する変数 */
-		D3DXMATRIX m_MatView;
+		D3DXMATRIX mat_view;
 
 		/* 角度 */
-		float m_Rad;
+		float rad;
 
 		/* 回転速度 */
-		float m_RotateSpeed;
+		float rotate_speed;
 
 		/* X軸回転 */
-		float m_Yaw;
+		float yaw;
 
 		/* Y軸回転 */
-		float m_Pitch;
+		float pitch;
 
 		/* Z軸回転 */
-		float m_Roll;
+		float roll;
 
 		/* スピード */
-		float m_Speed;
+		float speed;
 
 		/* 移動速度 */
 		//D3DXVECTOR3 m_Velocity;
 
 		bool m_startflag;
-	}m_cameradata;
+	}camera_data_;
 
 public:
-	CAMERA(D3DXVECTOR3 pos_) :
-		m_WalkSpeed(0.5f),
-		m_SprintSpeed(6.0f)
+	Camera(D3DXVECTOR3 pos_) :
+		walk_speed_(0.5f),
+		sprint_speed_(6.0f)
 	{
-		m_cameradata.m_CameraPos.x = pos_.x;
-		m_cameradata.m_CameraPos.y = pos_.y;//+ 0.5;	// 今だけ(FirstPerson用)
-		m_cameradata.m_CameraPos.z = pos_.z;
+		camera_data_.camera_pos.x = pos_.x;
+		camera_data_.camera_pos.y = pos_.y;//+ 0.5;	// 今だけ(FirstPerson用)
+		camera_data_.camera_pos.z = pos_.z;
 
-		m_cameradata.m_EyePos.x = 0.0f;
-		m_cameradata.m_EyePos.y = 0.0f;
-		m_cameradata.m_EyePos.z = 0.0f;
+		camera_data_.eye_pos.x = 0.0f;
+		camera_data_.eye_pos.y = 0.0f;
+		camera_data_.eye_pos.z = 0.0f;
 
-		m_cameradata.m_CameraUp.x = 0.0f;
-		m_cameradata.m_CameraUp.y = 1.0f;
-		m_cameradata.m_CameraUp.z = 0.0f;
+		camera_data_.camera_up.x = 0.0f;
+		camera_data_.camera_up.y = 1.0f;
+		camera_data_.camera_up.z = 0.0f;
 
-		m_cameradata.m_RotateSpeed = 0.05f;
+		camera_data_.rotate_speed = 0.05f;
 
-		m_cameradata.m_Yaw = 0.0f;
-		m_cameradata.m_Pitch = 0.0f;
-		m_cameradata.m_Roll = 0.0f;
+		camera_data_.yaw = 0.0f;
+		camera_data_.pitch = 0.0f;
+		camera_data_.roll = 0.0f;
 
-		m_cameradata.m_Speed = m_WalkSpeed;
+		camera_data_.speed = walk_speed_;
 
-		m_cameradata.m_startflag = false;
+		camera_data_.m_startflag = false;
 
-		D3DXMatrixIdentity(&m_cameradata.m_MatView);
+		D3DXMatrixIdentity(&camera_data_.mat_view);
 	}
 
 	// カメラ座標の更新
@@ -92,7 +92,7 @@ public:
 
 	void StickRotate();
 
-	CAMERA_DATA* GetCameraData() { return &m_cameradata; }
+	CAMERA_DATA* GetCameraData() { return &camera_data_; }
 
 
 };

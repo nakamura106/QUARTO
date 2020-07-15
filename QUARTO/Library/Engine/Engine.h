@@ -1,5 +1,5 @@
 /**
-* @file Engine.h
+* @file GetEngine.h
 * @brief エンジン処理(描画、入力)に関する関数、定数の宣言
 */
 #ifndef ENGINE_H_
@@ -19,7 +19,7 @@ public:
 * @param[in] height ウィンドウの縦幅
 * @param[in] title_name タイトルバーに表示する文字列
 */
-	bool InitEngine(int width, int height, const char* title_name);
+	bool InitEngine(int width_, int height_, const char* title_name_);
 
 	/**
 	* @brief エンジン終了関数@n
@@ -28,12 +28,12 @@ public:
 	*/
 	void EndEngine();
 
-	HWND GetWindowHandle() { return hWnd; };
+	HWND GetWindowHandle() { return hWnd_; };
 
 private:
-	bool MakeWindow(int width, int height, const char* title);
+	bool MakeWindow(int width_, int height_, const char* title_);
 private:
-	HWND hWnd;
+	HWND hWnd_;
 };
 
 #endif

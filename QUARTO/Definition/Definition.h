@@ -3,10 +3,10 @@
 
 #include"../Manager/LibraryManager.h"
 
-#define THE_INPUT LibraryManager::Instance()->input()
-#define THE_GRAPHICS LibraryManager::Instance()->graphics()
-#define THE_SOUND LibraryManager::Instance()->sound()
-#define THE_ENGINE LibraryManager::Instance()->engine()
-#define THE_CAMERA LibraryManager::Instance()->camera()
-#define THE_VIDEO LibraryManager::Instance()->video()
+#define THE_INPUT LibraryManager::Instance()->GetInput()
+#define THE_GRAPHICS LibraryManager::Instance()->GetGraphics()
+#define THE_SOUND LibraryManager::Instance()->GetAudio()
+#define THE_ENGINE LibraryManager::Instance()->GetEngine()
+#define THE_CAMERA LibraryManager::Instance()->GetCamera()
+#define THE_VIDEO LibraryManager::Instance()->GetVideo()
 #endif // !Difinition_H_

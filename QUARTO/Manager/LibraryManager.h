@@ -6,7 +6,7 @@
 class AudioPlayer;
 class Engine;
 class Graphics;
-class CAMERA;
+class Camera;
 class Input;
 class Video;
 
@@ -18,22 +18,22 @@ public:
 
 	void Init();
 
-	AudioPlayer* sound() { return m_Audio; };
-	Engine* engine() { return m_Engne; };
-	Graphics* graphics() { return m_Graphics; };
-	Input* input() { return m_Input; }
-	CAMERA* camera() { return m_Camera; };
-	Video* video() { return m_Video; }
+	AudioPlayer* GetAudio() { return audio_ptr_; };
+	Engine* GetEngine() { return engine_ptr_; };
+	Graphics* GetGraphics() { return graphics_ptr_; };
+	Input* GetInput() { return input_ptr_; }
+	Camera* GetCamera() { return camera_ptr_; };
+	Video* GetVideo() { return video_ptr_; }
 
 private:
-	static LibraryManager* instance;
+	static LibraryManager* instance_;
 
-	AudioPlayer* m_Audio;
-	Engine* m_Engne;
-	Graphics* m_Graphics;
-	Input* m_Input;
-	CAMERA* m_Camera;
-	Video* m_Video;
+	AudioPlayer* audio_ptr_;
+	Engine* engine_ptr_;
+	Graphics* graphics_ptr_;
+	Input* input_ptr_;
+	Camera* camera_ptr_;
+	Video* video_ptr_;
 
 	D3DXVECTOR3 pos=D3DXVECTOR3(0.0f,0.0f,0.0f);
 };

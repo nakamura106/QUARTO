@@ -6,34 +6,34 @@
 #include"../Library/Sound/Sound.h"
 #include"../Library/Video/Video.h"
 
-LibraryManager* LibraryManager::instance = 0;
+LibraryManager* LibraryManager::instance_ = 0;
 
 LibraryManager* LibraryManager::Instance()
 {
-	if (instance == 0)
+	if (instance_ == 0)
 	{
-		instance = new LibraryManager;
+		instance_ = new LibraryManager;
 	}
-	return instance;
+	return instance_;
 }
 
 LibraryManager::LibraryManager()
 {
-	m_Camera = new CAMERA(pos);
-	m_Engne = new Engine;
-	m_Graphics = new Graphics;
-	m_Audio = AudioPlayer::GetInstance(m_Engne->GetWindowHandle());
-	m_Input = new Input;
-	m_Video = new Video;
+	camera_ptr_ = new Camera(pos);
+	engine_ptr_ = new Engine;
+	graphics_ptr_ = new Graphics;
+	audio_ptr_ = AudioPlayer::GetInstance(engine_ptr_->GetWindowHandle());
+	input_ptr_ = new Input;
+	video_ptr_ = new Video;
 }
 
 void LibraryManager::Init()
 {
-	m_Camera = new CAMERA(pos);
-	m_Engne = new Engine;
-	m_Graphics = new Graphics;
-	m_Audio = AudioPlayer::GetInstance(m_Engne->GetWindowHandle());
-	m_Input = new Input;
-	m_Video = new Video;
+	camera_ptr_ = new Camera(pos);
+	engine_ptr_ = new Engine;
+	graphics_ptr_ = new Graphics;
+	audio_ptr_ = AudioPlayer::GetInstance(engine_ptr_->GetWindowHandle());
+	input_ptr_ = new Input;
+	video_ptr_ = new Video;
 }
 

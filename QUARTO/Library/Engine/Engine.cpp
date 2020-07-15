@@ -4,9 +4,9 @@
 #include"../../Definition/Definition.h"
 #include"../../Manager/LibraryManager.h"
 
-bool Engine::InitEngine(int width, int height, const char* title_name)
+bool Engine::InitEngine(int width_, int height_, const char* title_name_)
 {
-	if (MakeWindow(width, height, title_name) == false)
+	if (MakeWindow(width_, height_, title_name_) == false)
 	{
 		return false;
 	}
@@ -27,26 +27,26 @@ void Engine::EndEngine()
 	THE_GRAPHICS->ReleaseGraphics();
 }
 
-LRESULT CALLBACK WindowProc(HWND window_handle, UINT message_id, WPARAM wparam, LPARAM lparam)
+LRESULT CALLBACK WindowProc(HWND window_handle_, UINT message_id_, WPARAM wparam_, LPARAM lparam_)
 {
-	switch (message_id)
+	switch (message_id_)
 	{
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		break;
 	case WM_KEYDOWN:
-		if (wparam == VK_ESCAPE)
+		if (wparam_ == VK_ESCAPE)
 		{
-			PostMessage(window_handle, WM_CLOSE, NULL, NULL);
+			PostMessage(window_handle_, WM_CLOSE, NULL, NULL);
 		}
 	default:
-		return DefWindowProc(window_handle, message_id, wparam, lparam);
+		return DefWindowProc(window_handle_, message_id_, wparam_, lparam_);
 		break;
 	}
 	return 0;
 }
 
-bool Engine::MakeWindow(int width, int height, const char* title)
+bool Engine::MakeWindow(int width_, int height_, const char* title_)
 {
 	WNDCLASSEX window_class = {
 		sizeof(WNDCLASSEXA),			// 構造体のサイズ
@@ -70,20 +70,20 @@ bool Engine::MakeWindow(int width, int height, const char* title)
 	}
 
 	// ウィンドウ作成
-	hWnd = CreateWindowA(
+	hWnd_ = CreateWindowA(
 		WINDOW_CLASS_NAME,
-		title,
+		title_,
 		(WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME) | WS_VISIBLE,
 		CW_USEDEFAULT,
 		0,
-		width,
-		height,
+		width_,
+		height_,
 		NULL,
 		NULL,
 		GetModuleHandle(nullptr),
 		NULL);
 
-	if (hWnd == NULL)
+	if (hWnd_ == NULL)
 	{
 		return 0;
 	}
@@ -91,16 +91,16 @@ bool Engine::MakeWindow(int width, int height, const char* title)
 	RECT window_rect;
 	RECT client_rect;
 
-	GetWindowRect(hWnd, &window_rect);
-	GetClientRect(hWnd, &client_rect);
+	GetWindowRect(hWnd_, &window_rect);
+	GetClientRect(hWnd_, &client_rect);
 
 	int frame_size_x = (window_rect.right - window_rect.left) - (client_rect.right - client_rect.left);
 	int frame_size_y = (window_rect.bottom - window_rect.top) - (client_rect.bottom - client_rect.top);
 
-	SetWindowPos(hWnd, NULL, CW_USEDEFAULT, CW_USEDEFAULT, frame_size_x + width, frame_size_y + height, SWP_NOMOVE);
+	SetWindowPos(hWnd_, NULL, CW_USEDEFAULT, CW_USEDEFAULT, frame_size_x + width_, frame_size_y + height_, SWP_NOMOVE);
 
-	ShowWindow(hWnd, SW_SHOW);
-	UpdateWindow(hWnd);
+	ShowWindow(hWnd_, SW_SHOW);
+	UpdateWindow(hWnd_);
 
-	return hWnd;
+	return hWnd_;
 }

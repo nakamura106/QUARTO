@@ -583,7 +583,7 @@ void Fbx::DrawModel(FbxInfo * pModel)
 	{
 		MaterialData* pMaterial = &pModel->material_ptr[matIdx];
 		// テクスチャーの設定
-		pDevice->SetTexture(0, pMaterial->texture_data.Texture);
+		pDevice->SetTexture(0, pMaterial->texture_data.texture);
 
 		pDevice->SetMaterial(&pMaterial->material);
 		for (UINT meshIdx = 0; meshIdx < pModel->material_count; meshIdx++)

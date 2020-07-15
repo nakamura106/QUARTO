@@ -31,8 +31,8 @@ bool Graphics::InitGraphics()
 bool Graphics::CreateGraphicsInterface()
 {
 	// インターフェース作成
-	Interface = Direct3DCreate9(D3D_SDK_VERSION);
-	if (Interface == NULL)
+	interface_ = Direct3DCreate9(D3D_SDK_VERSION);
+	if (interface_ == NULL)
 	{
 		return false;
 	}
@@ -40,34 +40,34 @@ bool Graphics::CreateGraphicsInterface()
 	return true;
 }
 
-bool Graphics::CreateGraphicsDevice(D3DPRESENT_PARAMETERS* present_param)
+bool Graphics::CreateGraphicsDevice(D3DPRESENT_PARAMETERS* present_param_)
 {
-	present_param->BackBufferCount = 1;
-	present_param->BackBufferFormat = D3DFMT_A8R8G8B8;
-	present_param->Windowed = true;
-	present_param->SwapEffect = D3DSWAPEFFECT_DISCARD;
-	present_param->EnableAutoDepthStencil = true;
-	present_param->MultiSampleType = D3DMULTISAMPLE_NONE;
-	present_param->MultiSampleQuality = 0;
+	present_param_->BackBufferCount = 1;
+	present_param_->BackBufferFormat = D3DFMT_A8R8G8B8;
+	present_param_->Windowed = true;
+	present_param_->SwapEffect = D3DSWAPEFFECT_DISCARD;
+	present_param_->EnableAutoDepthStencil = true;
+	present_param_->MultiSampleType = D3DMULTISAMPLE_NONE;
+	present_param_->MultiSampleQuality = 0;
 
 	// デプスとステンシルバッファのフォーマット設定
-	present_param->AutoDepthStencilFormat = D3DFMT_D24S8;
+	present_param_->AutoDepthStencilFormat = D3DFMT_D24S8;
 
 	// もしフルスクリーンなら
-	if (present_param->Windowed == false)
+	if (present_param_->Windowed == false)
 	{
-		present_param->BackBufferWidth = 1920.0f;
-		present_param->BackBufferHeight = 1080.0f;
+		present_param_->BackBufferWidth = 1920.0f;
+		present_param_->BackBufferHeight = 1080.0f;
 
-		present_param->FullScreen_RefreshRateInHz = 60.0f;
+		present_param_->FullScreen_RefreshRateInHz = 60.0f;
 	}
 
-	if (FAILED(Interface->CreateDevice(D3DADAPTER_DEFAULT,
+	if (FAILED(interface_->CreateDevice(D3DADAPTER_DEFAULT,
 		D3DDEVTYPE_HAL,
 		FindWindowA(WINDOW_CLASS_NAME, nullptr),
 		D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED,
-		present_param,
-		&Device)))
+		present_param_,
+		&device_)))
 	{
 		return false;
 	}
@@ -75,64 +75,64 @@ bool Graphics::CreateGraphicsDevice(D3DPRESENT_PARAMETERS* present_param)
 	return true;
 }
 
-IDirect3DVertexBuffer9* Graphics::CreateVertexBuffer(const void* pVertices, UINT size)
+IDirect3DVertexBuffer9* Graphics::CreateVertexBuffer(const void* pVertices_, UINT size_)
 {
 	IDirect3DVertexBuffer9* pVertexBuffer;
 	IDirect3DDevice9* pDevice = GetD3DDevice();
 	// 指定したサイズの頂点バッファを作成
-	if (FAILED(pDevice->CreateVertexBuffer(size, 0, 0, D3DPOOL_MANAGED, &pVertexBuffer, NULL)))
+	if (FAILED(pDevice->CreateVertexBuffer(size_, 0, 0, D3DPOOL_MANAGED, &pVertexBuffer, NULL)))
 	{
 		return NULL;
 	}
 
-	if (pVertices)
+	if (pVertices_)
 	{
 		void* pData;
 		// バッファをロックしてデータを書き込む
-		if (SUCCEEDED(pVertexBuffer->Lock(0, size, &pData, 0)))
+		if (SUCCEEDED(pVertexBuffer->Lock(0, size_, &pData, 0)))
 		{
-			memcpy(pData, pVertices, size);
+			memcpy(pData, pVertices_, size_);
 			pVertexBuffer->Unlock();
 		}
 	}
 	return pVertexBuffer;
 }
 
-IDirect3DIndexBuffer9* Graphics::CreateIndexBuffer(const UINT16* pIndeces, UINT size)
+IDirect3DIndexBuffer9* Graphics::CreateIndexBuffer(const UINT16* pIndeces_, UINT size_)
 {
 	IDirect3DIndexBuffer9* pIndexBuffer;
 	IDirect3DDevice9* pDevice = GetD3DDevice();
 	// 16byte型のインデックスバッファを作成
-	if (FAILED(pDevice->CreateIndexBuffer(size, 0, D3DFMT_INDEX16, D3DPOOL_MANAGED, &pIndexBuffer, NULL)))
+	if (FAILED(pDevice->CreateIndexBuffer(size_, 0, D3DFMT_INDEX16, D3DPOOL_MANAGED, &pIndexBuffer, NULL)))
 	{
 		return NULL;
 	}
-	if (pIndeces)
+	if (pIndeces_)
 	{
 		void* pData;
 		// バッファをロックしてデータを書き込む
-		if (SUCCEEDED(pIndexBuffer->Lock(0, size, &pData, 0)))
+		if (SUCCEEDED(pIndexBuffer->Lock(0, size_, &pData, 0)))
 		{
-			memcpy(pData, pIndeces, size);
+			memcpy(pData, pIndeces_, size_);
 			pIndexBuffer->Unlock();
 		}
 	}
 	return pIndexBuffer;
 }
 
-bool Graphics::SetUpViewPort(D3DPRESENT_PARAMETERS* present_param)
+bool Graphics::SetUpViewPort(D3DPRESENT_PARAMETERS* present_param_)
 {
 	// ビューポートパラメータ
 	D3DVIEWPORT9 view_port;
 
 	view_port.X = 0;
 	view_port.Y = 0;
-	view_port.Width = present_param->BackBufferWidth;
-	view_port.Height = present_param->BackBufferHeight;
+	view_port.Width = present_param_->BackBufferWidth;
+	view_port.Height = present_param_->BackBufferHeight;
 	view_port.MinZ = 0.0f;
 	view_port.MaxZ = 1.0f;
 
-	if (FAILED(Device->SetViewport(&view_port)))
+	if (FAILED(device_->SetViewport(&view_port)))
 	{
 		return false;
 	}
@@ -142,12 +142,12 @@ bool Graphics::SetUpViewPort(D3DPRESENT_PARAMETERS* present_param)
 
 void Graphics::ReleaseGraphics()
 {
-	for (int i = 0; i < FontSize::FontSizeMax; i++)
+	for (int i = 0; i < FontSize::FONTSIZE_MAX; i++)
 	{
-		FontList[i]->Release();
+		fontlist_[i]->Release();
 	}
-	Device->Release();
-	Interface->Release();
+	device_->Release();
+	interface_->Release();
 }
 
 // 描画ステートの設定
@@ -173,28 +173,28 @@ void Graphics::SetRenderMode(ERenderMode mode_, bool enableAlpa_)
 
 	switch (mode_)
 	{
-	case Normal:
+	case NORMAL:
 		// αが有効 : (SrcColor * 1)  + (DestColor * 0)
 		// αが無効 : (SrcColor * α) + (DestColor * (1 - α))
 		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 		pDevice->SetRenderState(D3DRS_SRCBLEND, srcColorblend);
 		pDevice->SetRenderState(D3DRS_DESTBLEND, dstColorblend);
 		break;
-	case Add:
+	case ADD:
 		// αが有効：(SrcColor * 1) + (DestColor * 1)
 		// αが無効：(SrcColor * α) + (DestColor * 1)
 		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 		pDevice->SetRenderState(D3DRS_SRCBLEND, srcColorblend);
 		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 		break;
-	case Subtract:
+	case SUBTRACT:
 		// αが有効：(DestColor * 1) - (SrcColor * 1)
 		// αが無効：(DestColor * 1) - (SrcColor * α)
 		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
 		pDevice->SetRenderState(D3DRS_SRCBLEND, srcColorblend);
 		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 		break;
-	case Multiple:
+	case MULTIPLE:
 		// 共通 : (SrcColor * 0) + (DestColor * SrcColor
 		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ZERO);
@@ -207,27 +207,27 @@ void Graphics::SetRenderMode(ERenderMode mode_, bool enableAlpa_)
 
 void Graphics::DrawStart()
 {
-	Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
+	device_->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
 
-	Device->BeginScene();
+	device_->BeginScene();
 }
 
 void Graphics::DrawEnd()
 {
-	Device->EndScene();
-	Device->Present(NULL, NULL, NULL, NULL);
+	device_->EndScene();
+	device_->Present(NULL, NULL, NULL, NULL);
 }
 
 
 // テクスチャーの読み込み
-bool Graphics::LoadTexture(const char* file_name, TEXTURE_DATA* texture)
+bool Graphics::LoadTexture(const char* file_name_, TEXTURE_DATA* texture_)
 {
 	D3DXIMAGE_INFO info;
 
-	D3DXGetImageInfoFromFileA(file_name, &info);
+	D3DXGetImageInfoFromFileA(file_name_, &info);
 
-	if (FAILED(D3DXCreateTextureFromFileExA(Device,
-		file_name,
+	if (FAILED(D3DXCreateTextureFromFileExA(device_,
+		file_name_,
 		info.Width,
 		info.Height,
 		1,
@@ -239,7 +239,7 @@ bool Graphics::LoadTexture(const char* file_name, TEXTURE_DATA* texture)
 		0x0000ff00,
 		nullptr,
 		nullptr,
-		&texture->Texture)))
+		&texture_->texture)))
 	{
 		return false;
 	}
@@ -247,55 +247,55 @@ bool Graphics::LoadTexture(const char* file_name, TEXTURE_DATA* texture)
 	{
 		D3DSURFACE_DESC desc;
 
-		if (FAILED(texture->Texture->GetLevelDesc(0, &desc)))
+		if (FAILED(texture_->texture->GetLevelDesc(0, &desc)))
 		{
-			texture->Texture->Release();
-			texture->Texture = NULL;
+			texture_->texture->Release();
+			texture_->texture = NULL;
 			return false;
 		}
-		texture->Width = (float)desc.Width;
-		texture->Height = (float)desc.Height;
+		texture_->width = (float)desc.Width;
+		texture_->height = (float)desc.Height;
 	}
 	return true;
 }
 
-void Graphics::DrawTexture(TEXTURE_DATA* texture, D3DXVECTOR2 pos)
+void Graphics::DrawTexture(TEXTURE_DATA* texture_, D3DXVECTOR2 pos_)
 {
 	CUSTOM_VERTEX bg[4] =
 	{
 		// 左上頂点
-		{ pos.x, pos.y, 0.0f, 1.0f, 0.0f, 0.0f },
+		{ pos_.x, pos_.y, 0.0f, 1.0f, 0.0f, 0.0f },
 		// 右上頂点
-		{ pos.x + texture->Width, pos.y, 0.0f, 1.0f, 1.0f, 0.0f },
+		{ pos_.x + texture_->width, pos_.y, 0.0f, 1.0f, 1.0f, 0.0f },
 		// 右下頂点
-		{ pos.x + texture->Width, pos.y + texture->Height, 0.0f, 1.0f, 1.0f, 1.0f },
+		{ pos_.x + texture_->width, pos_.y + texture_->height, 0.0f, 1.0f, 1.0f, 1.0f },
 		// 左下頂点
-		{ pos.x, pos.y + texture->Height, 0.0f, 1.0f, 0.0f, 1.0f },
+		{ pos_.x, pos_.y + texture_->height, 0.0f, 1.0f, 0.0f, 1.0f },
 	};
 
-	Device->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);
+	device_->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);
 
-	Device->SetTexture(0, texture->Texture);
+	device_->SetTexture(0, texture_->texture);
 
-	Device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, bg, sizeof(CUSTOM_VERTEX));
+	device_->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, bg, sizeof(CUSTOM_VERTEX));
 }
 
 //UV用
-void Graphics::DrawUVTexture(TEXTURE_DATA * texture, D3DXVECTOR3 pos_, float sprite_width, float sprite_height, float tu, float tv, float Ttu, float Ttv, D3DXVECTOR3 angle, D3DXVECTOR3 scale)
+void Graphics::DrawUVTexture(TEXTURE_DATA * texture_, D3DXVECTOR3 pos_, float sprite_width_, float sprite_height_, float tu_, float tv_, float Ttu_, float Ttv_, D3DXVECTOR3 angle_, D3DXVECTOR3 scale_)
 {
 
-	float harf_x = sprite_width / 2.0f;
-	float harf_y = sprite_height / 2.0f;
+	float harf_x = sprite_width_ / 2.0f;
+	float harf_y = sprite_height_ / 2.0f;
 
-	/*float Ttu = sprite_width / texture->Width;
-	float Ttv = sprite_height / texture->Height;*/
+	/*float Ttu_ = sprite_width_ / texture_->width;
+	float Ttv_ = sprite_height_ / texture_->height;*/
 
 	CUSTOM_VERTEX effect[4] =
 	{
-		{ -harf_x, harf_y, 0.0f,tu, tv },
-		{ harf_x, harf_y, 0.0f,tu + Ttu, tv },
-		{ harf_x, -harf_y, 0.0f, tu + Ttu, tv + Ttv },
-		{ -harf_x, -harf_y, 0.0f, tu, tv + Ttv },
+		{ -harf_x, harf_y, 0.0f,tu_, tv_ },
+		{ harf_x, harf_y, 0.0f,tu_ + Ttu_, tv_ },
+		{ harf_x, -harf_y, 0.0f, tu_ + Ttu_, tv_ + Ttv_ },
+		{ -harf_x, -harf_y, 0.0f, tu_, tv_ + Ttv_ },
 	};
 
 	D3DXMATRIX mat_world, mat_trans, mat_scale, mat_rot, mat_rot_x, mat_rot_y, mat_rot_z;
@@ -305,11 +305,11 @@ void Graphics::DrawUVTexture(TEXTURE_DATA * texture, D3DXVECTOR3 pos_, float spr
 	// 移動
 	D3DXMatrixTranslation(&mat_trans, pos_.x, pos_.y, pos_.z);
 
-	D3DXMatrixScaling(&mat_scale, scale.x, scale.y, scale.z);
+	D3DXMatrixScaling(&mat_scale, scale_.x, scale_.y, scale_.z);
 
-	D3DXMatrixRotationX(&mat_rot_x, D3DXToRadian(angle.x));
-	D3DXMatrixRotationY(&mat_rot_y, D3DXToRadian(angle.y));
-	D3DXMatrixRotationZ(&mat_rot_z, D3DXToRadian(angle.z));
+	D3DXMatrixRotationX(&mat_rot_x, D3DXToRadian(angle_.x));
+	D3DXMatrixRotationY(&mat_rot_y, D3DXToRadian(angle_.y));
+	D3DXMatrixRotationZ(&mat_rot_z, D3DXToRadian(angle_.z));
 
 	mat_rot = mat_rot_x * mat_rot_y * mat_rot_z;
 
@@ -319,93 +319,93 @@ void Graphics::DrawUVTexture(TEXTURE_DATA * texture, D3DXVECTOR3 pos_, float spr
 
 	GetD3DDevice()->SetRenderState(D3DRS_LIGHTING, FALSE);
 	// 頂点構造の指定
-	Device->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
+	device_->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
 
-	Device->SetTexture(0, texture->Texture);
+	device_->SetTexture(0, texture_->texture);
 
-	Device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, effect, sizeof(CUSTOM_VERTEX));
+	device_->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, effect, sizeof(CUSTOM_VERTEX));
 
 }
 
 //UV用
-void Graphics::DrawUIUVTexture(TEXTURE_DATA * texture, D3DXVECTOR2 pos_, float sprite_width, float sprite_height, float tu, float tv)
+void Graphics::DrawUIUVTexture(TEXTURE_DATA * texture_, D3DXVECTOR2 pos_, float sprite_width_, float sprite_height_, float tu_, float tv_)
 {
-	float Ttu = sprite_width / texture->Width;
-	float Ttv = sprite_height / texture->Height;
+	float Ttu = sprite_width_ / texture_->width;
+	float Ttv = sprite_height_ / texture_->height;
 
 	CUSTOM_VERTEX effect[4] =
 	{
-		{ pos_.x, pos_.y, 0.0f, 1.0f, tu, tv },
-		{ pos_.x + sprite_width, pos_.y, 0.0f, 1.0f, tu + Ttu , tv },
-		{ pos_.x + sprite_width, pos_.y + sprite_height, 0.0f, 1.0f, tu + Ttu, tv + Ttv},
-		{ pos_.x, pos_.y + sprite_height, 0.0f, 1.0f, tu, tv + Ttv },
+		{ pos_.x, pos_.y, 0.0f, 1.0f, tu_, tv_ },
+		{ pos_.x + sprite_width_, pos_.y, 0.0f, 1.0f, tu_ + Ttu , tv_ },
+		{ pos_.x + sprite_width_, pos_.y + sprite_height_, 0.0f, 1.0f, tu_ + Ttu, tv_ + Ttv},
+		{ pos_.x, pos_.y + sprite_height_, 0.0f, 1.0f, tu_, tv_ + Ttv },
 	};
 
 	// 頂点構造の指定
-	Device->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);
+	device_->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);
 
-	Device->SetTexture(0, texture->Texture);
+	device_->SetTexture(0, texture_->texture);
 
-	Device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, effect, sizeof(CUSTOM_VERTEX));
+	device_->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, effect, sizeof(CUSTOM_VERTEX));
 
 }
 
 // テクスチャーの解放
-void Graphics::ReleaseTexture(TEXTURE_DATA * pTextureData)
+void Graphics::ReleaseTexture(TEXTURE_DATA * texture_data_ptr_)
 {
-	if (pTextureData == NULL) return;
+	if (texture_data_ptr_ == NULL) return;
 
 	for (int i = 0; i < TEXTURE_MAX; i++)
 	{
-		LoadedTextureInfo* pInfo = &loadedTextures[i];
+		LoadedTextureInfo* pInfo = &loaded_textures_[i];
 		if (pInfo->count == 0) continue;
 
-		if (pInfo->texData.Texture == pTextureData->Texture)
+		if (pInfo->tex_data.texture == texture_data_ptr_->texture)
 		{
 			pInfo->count--;
 			if (pInfo->count == 0)
 			{
 				ZeroMemory(pInfo, sizeof(*pInfo));
 
-				SAFE_RELEASE(pTextureData->Texture);
+				SAFE_RELEASE(texture_data_ptr_->texture);
 			}
 		}
 	}
 }
 
 //文字描画
-void Graphics::DrawFont(float pos_x, float pos_y, const char* text, FontSize font_type, FontColor color)
+void Graphics::DrawFont(float pos_x_, float pos_y_, const char* text_, FontSize font_type_, FontColor color_)
 {
 	RECT rect =
 	{
-		(long)pos_x,
-		(long)pos_y,
-		(long)pos_x + 400,
-		(long)pos_y + 200,
+		(long)pos_x_,
+		(long)pos_y_,
+		(long)pos_x_ + 400,
+		(long)pos_y_ + 200,
 	};
 
 	int r, g, b;
 	r = g = b = 255;
 
-	if (color == FontColor::Black)
+	if (color_ == FontColor::BLACK)
 	{
 		r = g = b = 0;
 	}
-	else if (color == FontColor::Red)
+	else if (color_ == FontColor::RED)
 	{
 		r = 255;
 		g = b = 0;
 	}
-	else if (color == FontColor::Yellow)
+	else if (color_ == FontColor::YELLOW)
 	{
 		r = 255;
 		g = 225;
 		b = 0;
 	}
 
-	FontList[font_type]->DrawTextA(
+	fontlist_[font_type_]->DrawTextA(
 		NULL,
-		text,
+		text_,
 		-1,
 		&rect,
 		DT_LEFT,
@@ -423,9 +423,9 @@ bool Graphics::CreateFontDevice()
 		LARGE_FONT_SIZE
 	};
 
-	for (int i = 0; i < FontSize::FontSizeMax; i++)
+	for (int i = 0; i < FontSize::FONTSIZE_MAX; i++)
 	{
-		if (FAILED(D3DXCreateFont(Device,
+		if (FAILED(D3DXCreateFont(device_,
 			size_list[i],
 			size_list[i] / 2,
 			FW_REGULAR,
@@ -436,7 +436,7 @@ bool Graphics::CreateFontDevice()
 			PROOF_QUALITY,
 			FIXED_PITCH | FF_SCRIPT,
 			TEXT("ＭＳ　Ｐゴシック"),
-			&FontList[i])))
+			&fontlist_[i])))
 		{
 			return false;
 		}
@@ -447,7 +447,7 @@ bool Graphics::CreateFontDevice()
 
 const LPDIRECT3DDEVICE9 Graphics::GetD3DDevice(void)
 {
-	return Device;
+	return device_;
 }
 
 void Graphics::SetLight()
@@ -469,7 +469,7 @@ void Graphics::SetLight()
 	light.Ambient.b = 0.5f;
 	D3DXVec3Normalize((D3DXVECTOR3*)& light.Direction, &vec_direction);
 	light.Range = 200.0f;
-	Device->SetLight(0, &light);
-	Device->LightEnable(0, true);
-	Device->SetRenderState(D3DRS_LIGHTING, false);
+	device_->SetLight(0, &light);
+	device_->LightEnable(0, true);
+	device_->SetRenderState(D3DRS_LIGHTING, false);
 }

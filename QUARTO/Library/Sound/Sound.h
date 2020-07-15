@@ -4,8 +4,8 @@
 
 #include <string>
 #include <unordered_map>
-#include <dsound.h>
 #include <string>
+#include <dsound.h>
 
 class DirectSound {
 

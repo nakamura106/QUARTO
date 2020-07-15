@@ -28,9 +28,10 @@ public:
 	*/
 	void EndEngine();
 
-	bool MakeWindow(int width, int height, const char* title);
 	HWND GetWindowHandle() { return hWnd; };
 
+private:
+	bool MakeWindow(int width, int height, const char* title);
 private:
 	HWND hWnd;
 };

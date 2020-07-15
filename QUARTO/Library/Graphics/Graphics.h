@@ -98,27 +98,20 @@ public:
 	};
 
 public:
-	void SetRenderMode(ERenderMode mode_, bool enableAlpa_);
-
+	
 	bool InitGraphics();
-
-	void ReleaseGraphics();
-
-	bool CreateGraphicsInterface();
-
-	bool CreateGraphicsDevice(D3DPRESENT_PARAMETERS* present_param);
 
 	// 頂点バッファの生成
 	IDirect3DVertexBuffer9* CreateVertexBuffer(const void* pVertices, UINT size);
+
 	// インデックスバッファの生成
 	IDirect3DIndexBuffer9* CreateIndexBuffer(const UINT16* pIndeces, UINT size);
 
-	bool SetUpViewPort(D3DPRESENT_PARAMETERS* present_param);
+	void ReleaseGraphics();
 
 	void DrawStart();
 
 	void DrawEnd();
-
 	
 	void DrawUVTexture(TEXTURE_DATA* texture, D3DXVECTOR3 pos_, float sprite_width, float sprite_height, float tu, float tv, float Ttu, float Ttv, D3DXVECTOR3 angle, D3DXVECTOR3 scale);
 
@@ -130,13 +123,18 @@ public:
 
 	void ReleaseTexture(TEXTURE_DATA*);
 
-	void DrawFont(float pos_x, float pos_y, const char* text, FontSize font_type, FontColor color);
-
-	bool CreateFontDevice();
+	void DrawFont(float pos_x, float pos_y, const char* text, FontSize font_type, FontColor color);	
 
 	const LPDIRECT3DDEVICE9 GetD3DDevice(void);
 
-	void SetLight();
+
+    private:
+		void SetRenderMode(ERenderMode mode_, bool enableAlpa_);
+		bool CreateGraphicsInterface();
+		bool CreateGraphicsDevice(D3DPRESENT_PARAMETERS* present_param);
+		bool CreateFontDevice();
+		bool SetUpViewPort(D3DPRESENT_PARAMETERS* present_param);
+		void SetLight();
 
 	private:
 		LPDIRECT3D9 Interface;

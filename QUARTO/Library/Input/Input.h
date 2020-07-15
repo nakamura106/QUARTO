@@ -88,10 +88,7 @@ public:
 	};
 	
 public:
-	BOOL StartGamePadControl();
-	BOOL SetUpGamePadProperty(LPDIRECTINPUTDEVICE8 device);
-	static BOOL CALLBACK DeviceFindCallBack(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);
-	/**
+/**
 	* @brief Input機能の初期化関数@n
 	* デバイスの入力取得に必要な初期化を行います
 	* InitEngineで実行されるので開発側が実行する必要はありません
@@ -108,19 +105,9 @@ public:
 	*/
 	void EndInput();
 
-	bool CreateInputInterface();
 
-	bool CreateMouseDevice();
-
-	bool CreateGamePadDevice();
-
-	bool CreateKeyboardDevice();
-	/**
-	* @brief キーボードの入力情報の更新@n
-	* デバイスの入力情報の更新を行います@n
-	* 毎フレームに1度必ず実行する必要があります
-	*/
-	void KeyStateUpdate();
+	
+	
 
 	/**
 	* @brief キーが押されている状態の判定関数@n
@@ -137,9 +124,7 @@ public:
 	*/
 	void UpdateInput();
 
-	void UpdateMouse();
-
-	void UpdateGamePad();
+	
 
 	/**
 	* @brief キーが押された瞬間の判定関数@n
@@ -187,6 +172,23 @@ public:
 	bool IsButtonPush(ButtonKind button);
 	bool IsButtonUp(ButtonKind button);
 	bool IsButtonDown(ButtonKind button);
+
+	private:
+		BOOL StartGamePadControl();
+		BOOL SetUpGamePadProperty(LPDIRECTINPUTDEVICE8 device);
+		static BOOL CALLBACK DeviceFindCallBack(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);		
+		/**
+	* @brief キーボードの入力情報の更新@n
+	* デバイスの入力情報の更新を行います@n
+	* 毎フレームに1度必ず実行する必要があります
+	*/
+		void KeyStateUpdate();
+		void UpdateMouse();
+		void UpdateGamePad();
+		bool CreateInputInterface();
+		bool CreateMouseDevice();
+		bool CreateGamePadDevice();
+		bool CreateKeyboardDevice();
 
 	private:
 		LPDIRECTINPUT8 InputInterface;

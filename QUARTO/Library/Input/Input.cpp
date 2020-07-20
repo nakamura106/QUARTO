@@ -402,17 +402,17 @@ void Input::KeyStateUpdate()
 	}
 }
 
-bool Input::GetKey(KeyInfo key_)
+bool Input::GetKey(KEY_INFO key_)
 {
 	return (InputState[key_] == InputState::PUSH);
 }
 
-bool Input::GetKeyDown(KeyInfo key_)
+bool Input::GetKeyDown(KEY_INFO key_)
 {
 	return (InputState[key_] == InputState::PUSH_DOWN);
 }
 
-bool Input::GetKeyUp(KeyInfo key_)
+bool Input::GetKeyUp(KEY_INFO key_)
 {
 	return (InputState[key_] == InputState::PUSH_UP);
 }

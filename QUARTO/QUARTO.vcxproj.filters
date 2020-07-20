@@ -84,6 +84,18 @@
     <ClCompile Include="Library\Video\Video.cpp">
       <Filter>Library\Video</Filter>
     </ClCompile>
+    <ClCompile Include="Library\Scene\GameEndScene\GameEndScene.cpp">
+      <Filter>Library\Scene\GameEndScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\Scene\GameMainScene\GameMainScene.cpp">
+      <Filter>Library\Scene\GameMainScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\Scene\HelpScene\HelpScene.cpp">
+      <Filter>Library\Scene\HelpScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\Scene\TitleScene\TitleScene.cpp">
+      <Filter>Library\Scene\TitleScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\Input\Input.h">
@@ -115,6 +127,18 @@
     </ClInclude>
     <ClInclude Include="Library\Video\Video.h">
       <Filter>Library\Video</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Scene\GameEndScene\GameEndScene.h">
+      <Filter>Library\Scene\GameEndScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Scene\GameMainScene\GameMainScene.h">
+      <Filter>Library\Scene\GameMainScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Scene\HelpScene\HelpScene.h">
+      <Filter>Library\Scene\HelpScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Scene\TitleScene\TitleScene.h">
+      <Filter>Library\Scene\TitleScene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -27,40 +27,40 @@ class Graphics
 public:
 	struct TEXTURE_DATA
 	{
-		LPDIRECT3DTEXTURE9 Texture;
-		float Width;
-		float Height;
+		LPDIRECT3DTEXTURE9 texture;
+		float width;
+		float height;
 	};
 
 	struct LoadedTextureInfo
 	{
 		char		filename[MAX_PATH];
 		int			count;
-		TEXTURE_DATA texData;
-	}loadedTextures[TEXTURE_MAX] = {};
+		TEXTURE_DATA tex_data;
+	}loaded_textures_[TEXTURE_MAX] = {};
 
 	struct Size
 	{
 		Size()
 		{
-			Width = 0.0f;
-			Height = 0.0f;
+			width = 0.0f;
+			height = 0.0f;
 		}
 
 		Size(float width, float height)
 		{
-			Width = width;
-			Height = height;
+			width = width;
+			height = height;
 		}
 
 		Size(const Size& size)
 		{
-			this->Width = size.Width;
-			this->Height = size.Height;
+			this->width = size.width;
+			this->height = size.height;
 		}
 
-		float Width;
-		float Height;
+		float width;
+		float height;
 	};
 
 	struct CUSTOM_VERTEX
@@ -75,26 +75,26 @@ public:
 
 	enum ERenderMode
 	{
-		Normal,		// 書き込み
-		Add,		// 加算
-		Subtract,	// 減算
-		Multiple,	// 乗算
+		NORMAL,		// 書き込み
+		ADD,		// 加算
+		SUBTRACT,	// 減算
+		MULTIPLE,	// 乗算
 	};
 
 	enum FontColor
 	{
-		Black,
-		White,
-		Red,
-		Yellow,
+		BLACK,
+		WHITE,
+		RED,
+		YELLOW,
 	};
 
 	enum FontSize
 	{
-		Small,
-		Regular,
-		Large,
-		FontSizeMax,
+		SMALL,
+		REGULAR,
+		LARGE,
+		FONTSIZE_MAX,
 	};
 
 public:
@@ -102,10 +102,10 @@ public:
 	bool InitGraphics();
 
 	// 頂点バッファの生成
-	IDirect3DVertexBuffer9* CreateVertexBuffer(const void* pVertices, UINT size);
+	IDirect3DVertexBuffer9* CreateVertexBuffer(const void* pVertices_, UINT size_);
 
 	// インデックスバッファの生成
-	IDirect3DIndexBuffer9* CreateIndexBuffer(const UINT16* pIndeces, UINT size);
+	IDirect3DIndexBuffer9* CreateIndexBuffer(const UINT16* pIndeces_, UINT size_);
 
 	void ReleaseGraphics();
 
@@ -113,17 +113,17 @@ public:
 
 	void DrawEnd();
 	
-	void DrawUVTexture(TEXTURE_DATA* texture, D3DXVECTOR3 pos_, float sprite_width, float sprite_height, float tu, float tv, float Ttu, float Ttv, D3DXVECTOR3 angle, D3DXVECTOR3 scale);
+	void DrawUVTexture(TEXTURE_DATA* texture_, D3DXVECTOR3 pos_, float sprite_width_, float sprite_height_, float tu_, float tv_, float Ttu_, float Ttv_, D3DXVECTOR3 angle_, D3DXVECTOR3 scale_);
 
-	void DrawUIUVTexture(TEXTURE_DATA* texture, D3DXVECTOR2 pos_, float sprite_width, float sprite_height, float tu, float tv);
+	void DrawUIUVTexture(TEXTURE_DATA* texture_, D3DXVECTOR2 pos_, float sprite_width_, float sprite_height_, float tu_, float tv_);
 
-	bool LoadTexture(const char* file_name, TEXTURE_DATA* texture);
+	bool LoadTexture(const char* file_name_, TEXTURE_DATA* texture_);
 
-	void DrawTexture(TEXTURE_DATA* texture, D3DXVECTOR2 pos);
+	void DrawTexture(TEXTURE_DATA* texture_, D3DXVECTOR2 pos_);
 
 	void ReleaseTexture(TEXTURE_DATA*);
 
-	void DrawFont(float pos_x, float pos_y, const char* text, FontSize font_type, FontColor color);	
+	void DrawFont(float pos_x_, float pos_y_, const char* text_, FontSize font_type_, FontColor color_);	
 
 	const LPDIRECT3DDEVICE9 GetD3DDevice(void);
 
@@ -131,15 +131,15 @@ public:
     private:
 		void SetRenderMode(ERenderMode mode_, bool enableAlpa_);
 		bool CreateGraphicsInterface();
-		bool CreateGraphicsDevice(D3DPRESENT_PARAMETERS* present_param);
+		bool CreateGraphicsDevice(D3DPRESENT_PARAMETERS* present_param_);
 		bool CreateFontDevice();
-		bool SetUpViewPort(D3DPRESENT_PARAMETERS* present_param);
+		bool SetUpViewPort(D3DPRESENT_PARAMETERS* present_param_);
 		void SetLight();
 
 	private:
-		LPDIRECT3D9 Interface;
-		LPDIRECT3DDEVICE9 Device;
-		LPD3DXFONT FontList[FontSize::FontSizeMax];
+		LPDIRECT3D9 interface_;
+		LPDIRECT3DDEVICE9 device_;
+		LPD3DXFONT fontlist_[FontSize::FONTSIZE_MAX];
 
 };
 

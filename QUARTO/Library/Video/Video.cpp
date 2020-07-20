@@ -9,69 +9,69 @@ Video::Video()
 
 HRESULT Video::InitCom()
 {
-	hRes = CoInitialize(NULL);
-	if (FAILED(hRes))
+	h_res_ = CoInitialize(NULL);
+	if (FAILED(h_res_))
 	{
 		return false;
 	}
-	hRes = CoCreateInstance(
+	h_res_ = CoCreateInstance(
 		CLSID_FilterGraph,
 		NULL,
 		CLSCTX_INPROC_SERVER,
 		IID_IGraphBuilder,
-		(void**)&m_Graph
+		(void**)&graph_
 	);
 
-	if (FAILED(hRes))
-		return hRes;
+	if (FAILED(h_res_))
+		return h_res_;
 }
 
 HRESULT Video::MediaControl()
 {
-	hRes = m_Graph->QueryInterface(IID_IMediaControl, (void**)&m_Control);
-	if (FAILED(hRes))
-		return hRes;
+	h_res_ = graph_->QueryInterface(IID_IMediaControl, (void**)&control_);
+	if (FAILED(h_res_))
+		return h_res_;
 }
 
 HRESULT Video::MediaEvent()
 {
-	hRes = m_Graph->QueryInterface(IID_IMediaEvent, (void**)&m_Event);
-	if (FAILED(hRes))
-		return hRes;
+	h_res_ = graph_->QueryInterface(IID_IMediaEvent, (void**)&event_);
+	if (FAILED(h_res_))
+		return h_res_;
 }
 
 HRESULT Video::Load(std::string filename_)
 {
-	hRes = m_Graph->RenderFile(L"Res/Movie/【PS3】-El-Shaddai-エルシャダイ-　_ルシフェルver_-高画質版.avi", NULL);
-	if (FAILED(hRes))
-		return hRes;
+	h_res_ = graph_->RenderFile(L"Res/Movie/【PS3】-El-Shaddai-エルシャダイ-　_ルシフェルver_-高画質版.avi", NULL);
+	if (FAILED(h_res_))
+		return h_res_;
 }
 
 void Video::Play(int time_)
 {
-	if (SUCCEEDED(hRes))
+	if (SUCCEEDED(h_res_))
 	{
-		hRes = m_Control->Run();
-		if (SUCCEEDED(hRes))
+		h_res_ = control_->Run();
+		if (SUCCEEDED(h_res_))
 		{
 			long pEvCode;
-			hRes = m_Event->WaitForCompletion(INFINITE, &pEvCode);
+			h_res_ = event_->WaitForCompletion(INFINITE, &pEvCode);
 		}
 	}
 
-	if (m_Control != NULL)
+	if (control_ != NULL)
 	{
-		m_Control->Stop();
+		control_->Stop();
 
-		m_Control->Release();
+		control_->Release();
 	}
-	if (m_Event != NULL)
+	if (event_ != NULL)
 	{
-		m_Event->Release();
+		event_->Release();
 	}
-	if (m_Graph != NULL)
+	if (graph_ != NULL)
 	{
-		m_Graph->Release();
+		graph_->Release();
 	}
 	
 

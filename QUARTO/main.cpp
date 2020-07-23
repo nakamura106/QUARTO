@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <thread>
 #include"Manager/LibraryManager.h"
+#include"Manager/SoundManager.h"
 #include"Definition/Definition.h"
 #include"Library/Engine/Engine.h"
 #include"Library/Graphics/Graphics.h"
@@ -19,8 +20,10 @@ int WINAPI WinMain(HINSTANCE hinstance,
 		return 0;
 	}
 
-	THE_VIDEO->Load("Res/Movie/【PS3】-El-Shaddai-エルシャダイ-　_ルシフェルver_-高画質版.avi");
-	THE_VIDEO->Play(5000);
+	//THE_VIDEO->Load("Res/Movie/【PS3】-El-Shaddai-エルシャダイ-　_ルシフェルver_-高画質版.avi");
+	//THE_VIDEO->Play(5000);
+	THE_SOUND->RegisterSound();
+	
 
 	while (true)
 	{
@@ -45,6 +48,7 @@ int WINAPI WinMain(HINSTANCE hinstance,
 		else
 		{
 			THE_GRAPHICS->DrawStart();
+			THE_SOUND->SoundBGM("BGM");
 			THE_GRAPHICS->DrawEnd();
 			
 		}

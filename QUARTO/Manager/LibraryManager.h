@@ -18,7 +18,6 @@ public:
 
 	void Init();
 
-	AudioPlayer* GetAudio() { return audio_ptr_; };
 	Engine* GetEngine() { return engine_ptr_; };
 	Graphics* GetGraphics() { return graphics_ptr_; };
 	Input* GetInput() { return input_ptr_; }
@@ -28,7 +27,6 @@ public:
 private:
 	static LibraryManager* instance_;
 
-	AudioPlayer* audio_ptr_;
 	Engine* engine_ptr_;
 	Graphics* graphics_ptr_;
 	Input* input_ptr_;

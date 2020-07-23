@@ -22,7 +22,6 @@ LibraryManager::LibraryManager()
 	camera_ptr_ = new Camera(pos);
 	engine_ptr_ = new Engine;
 	graphics_ptr_ = new Graphics;
-	audio_ptr_ = AudioPlayer::GetInstance(engine_ptr_->GetWindowHandle());
 	input_ptr_ = new Input;
 	video_ptr_ = new Video;
 }
@@ -32,7 +31,6 @@ void LibraryManager::Init()
 	camera_ptr_ = new Camera(pos);
 	engine_ptr_ = new Engine;
 	graphics_ptr_ = new Graphics;
-	audio_ptr_ = AudioPlayer::GetInstance(engine_ptr_->GetWindowHandle());
 	input_ptr_ = new Input;
 	video_ptr_ = new Video;
 }

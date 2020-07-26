@@ -15,18 +15,18 @@ SoundManager* SoundManager::Instance()
 
 void SoundManager::RegisterSound()
 {
-	pAudio->Load(m_bgm,m_bgm_file);
+	pAudio->Load("BGM",sound_file["BGM"]);
 	
 }
 
 void SoundManager::SoundBGM(std::string key_,int vol_)
 {
-	pAudio->Play(m_bgm,vol_,true);
+	pAudio->Play(key_,vol_,true);
 }
 
 void SoundManager::SoundSE(std::string key_, int vol_)
 {
-	pAudio->Play(sound_file[key_], vol_);
+	pAudio->Play(key_, vol_);
 }
 
 void SoundManager::ReleaseSound()
@@ -41,10 +41,8 @@ SoundManager::SoundManager()
 {
 	pAudio = AudioPlayer::GetInstance(FindWindow(WINDOW_CLASS_NAME,nullptr));
 	
-	m_bgm = "BGM";
-	m_bgm_file = "Res/Sound/–³‘è.wav";
-
-	sound_file["BGM"] = "BGM";
-	sound_file["SE"] = "SE";
+	
+	
+	sound_file["BGM"] = "Res/Sound/bgm055_loop.wav";
 
 }

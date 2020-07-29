@@ -39,18 +39,17 @@ void TitleScene::UpdateScene()
 
 void TitleScene::EndScene()
 {
+	THE_GRAPHICS->ReleaseTexture(&tex);
+	//THE_FBX->ReleaseFbxMesh("Box");
+
 	THE_SCENE->SetSceneStep(SceneStep::Init);
 	THE_SCENE->SetSceneId(SceneId::Game);
 }
 
 void TitleScene::Draw()
 {
-	if (THE_INPUT->GetKey(KeyCode::A_KEY) || THE_INPUT->IsButtonPush(KeyCode::A_BUTTON) || THE_INPUT->OnMousePush(KeyCode::LEFT))
-	{
-		THE_GRAPHICS->DrawTexture(&tex, D3DXVECTOR2(0, 0));
-		THE_GRAPHICS->DrawFont(0, 0, "ABCDE", Graphics::FontSize::SMALL, Graphics::BLACK);
-	}
-
+	//THE_GRAPHICS->DrawTexture(&tex, D3DXVECTOR2(0, 0));
+	THE_GRAPHICS->DrawFont(0, 0, "ABCDE", Graphics::FontSize::SMALL, Graphics::BLACK);
 	THE_FBX->DrawFbx("Box", world);
 
 }

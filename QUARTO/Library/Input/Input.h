@@ -30,6 +30,7 @@ struct KeyCode
 		MAX_KEY_INFO,
 	};
 
+	//コントローラーのボタン
 	enum ButtonKind
 	{
 		A_BUTTON,
@@ -54,6 +55,8 @@ struct KeyCode
 		RIGHT_BUTTON,
 		BUTTON_KIND_MAX,
 	};
+
+	//マウスのボタン
 	enum MouseButton
 	{
 		LEFT,		//!< 左
@@ -65,7 +68,7 @@ struct KeyCode
 
 struct KeyState
 {
-	
+	//ボタンの状態
 	enum ButtonState
 	{
 		BUTTON_STATE_NONE,
@@ -75,6 +78,7 @@ struct KeyState
 		BUTTON_STATE_MAX,
 	};
 
+	//押し状態
 	enum InputState
 	{
 		NOT_PUSH,		//押されていない
@@ -86,8 +90,6 @@ struct KeyState
 
 class Input {
 public:
-	/** @brief マウスボタンの種類 */
-	
 
 	struct DeviceEnumParameter
 	{
@@ -177,8 +179,28 @@ public:
 	/** @brief マウスの座標取得関数 */
 	D3DXVECTOR2 GetMousePos();
 
+	/**
+	* @brief コントローラーのボタン判定関数@n
+	* 指定したコントローラーのボタンを押しているかしているかどうかを判定する
+	* @return 判定結果(押している間true)
+	* @param[in] button_type 判定したいボタンの種類
+	*/
 	bool IsButtonPush(KeyCode::ButtonKind button_);
+
+	/**
+	* @brief コントローラーのボタン判定関数@n
+	* 指定したコントローラーのボタンを離した瞬間を判定する
+	* @return 判定結果(ボタンを離した瞬間ならtrue)
+	* @param[in] button_type 判定したいボタンの種類
+	*/
 	bool IsButtonUp(KeyCode::ButtonKind button_);
+
+	/**
+	* @brief コントローラーのボタン判定関数@n
+	* 指定したコントローラーのボタンを押した瞬間を判定する
+	* @return 判定結果(ボタンを押した瞬間ならtrue)
+	* @param[in] button_type 判定したいボタンの種類
+	*/
 	bool IsButtonDown(KeyCode::ButtonKind button_);
 
 	private:

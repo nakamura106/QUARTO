@@ -113,16 +113,29 @@ public:
 
 	void DrawEnd();
 	
-	void DrawUVTexture(TEXTURE_DATA* texture_, D3DXVECTOR3 pos_, float sprite_width_, float sprite_height_, float tu_, float tv_, float Ttu_, float Ttv_, D3DXVECTOR3 angle_, D3DXVECTOR3 scale_);
 
+	//UV描画
 	void DrawUIUVTexture(TEXTURE_DATA* texture_, D3DXVECTOR2 pos_, float sprite_width_, float sprite_height_, float tu_, float tv_);
 
+	/*画像読込
+	第一引数はファイルパス
+	*/
 	bool LoadTexture(const char* file_name_, TEXTURE_DATA* texture_);
 
+	//画像まるまる一枚描画
 	void DrawTexture(TEXTURE_DATA* texture_, D3DXVECTOR2 pos_);
 
+	/*解放関数
+	第一引数で指定した画像を解放する
+	*/
 	void ReleaseTexture(TEXTURE_DATA*);
 
+	/*文字描画
+	第一引数、第二引数は座標
+	第三引数で指定した文字を描画
+	第四引数はサイズ
+	第五引数は色
+	*/
 	void DrawFont(float pos_x_, float pos_y_, const char* text_, FontSize font_type_, FontColor color_);	
 
 	const LPDIRECT3DDEVICE9 GetD3DDevice(void);

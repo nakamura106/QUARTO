@@ -51,7 +51,7 @@ public:
 
 	const TitleScene* GetTitle() { return Scene_Instance.title; };
 	const HelpScene* GetHelp() { return Scene_Instance.help; };
-	const GameMainScene* GetGamaMain() { return Scene_Instance.main; };
+	const GameMainScene* GetGameMain() { return Scene_Instance.main; };
 	const GameEndScene* GetEnd() { return Scene_Instance.end; };
 
 	void SetSceneStep(SceneStep step_) { Scene_Info.CurrentSceneStep = step_; };

@@ -1,16 +1,8 @@
 #include <fbxsdk.h>
 #include <Windows.h>
 #include <thread>
-#include"Manager/LibraryManager.h"
-#include"Manager/SoundManager.h"
-#include"Manager/FbxManager.h"
 #include"Manager/SceneManager.h"
 #include"Definition/Definition.h"
-#include"Library/Engine/Engine.h"
-#include"Library/Input/Input.h"
-#include"Library/Graphics/Graphics.h"
-#include"Library/Video/Video.h"
-#include"Library/Engine/Camera.h"
 
 int WINAPI WinMain(HINSTANCE hinstance,
 	HINSTANCE hPrevInstance,
@@ -55,7 +47,7 @@ int WINAPI WinMain(HINSTANCE hinstance,
 			
 		}
 	}
-	THE_FBX->ReleaseFbxMesh("Box");
+	
 	// ƒGƒ“ƒWƒ“I—¹
 	THE_ENGINE->EndEngine();
 }

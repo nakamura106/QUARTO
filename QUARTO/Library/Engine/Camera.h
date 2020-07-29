@@ -85,8 +85,10 @@ public:
 	// カメラの移動
 	void Move();
 
+	//マウス操作での回転
 	void MouseRotate();
 
+	//コントローラー操作での回転
 	void StickRotate();
 
 	CAMERA_DATA* GetCameraData() { return &camera_data_; }

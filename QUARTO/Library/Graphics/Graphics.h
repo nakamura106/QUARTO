@@ -47,10 +47,10 @@ public:
 			height = 0.0f;
 		}
 
-		Size(float width, float height)
+		Size(float width_, float height_)
 		{
-			width = width;
-			height = height;
+			width = width_;
+			height = height_;
 		}
 
 		Size(const Size& size)

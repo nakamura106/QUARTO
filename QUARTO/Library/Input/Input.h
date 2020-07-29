@@ -4,17 +4,8 @@
 #include <Windows.h>
 #include <dinput.h>
 #include<d3dx9.h>
-
-class Input {
-public:
-	/** @brief マウスボタンの種類 */
-	enum MouseButton
-	{
-		LEFT,		//!< 左
-		RIGHT,		//!< 右
-		CENTER,		//!< 真ん中
-	};
-
+struct KeyCode
+{
 	// @brife キーの種類
 	enum KEY_INFO
 	{
@@ -63,7 +54,18 @@ public:
 		RIGHT_BUTTON,
 		BUTTON_KIND_MAX,
 	};
+	enum MouseButton
+	{
+		LEFT,		//!< 左
+		RIGHT,		//!< 右
+		CENTER,		//!< 真ん中
+	};
 
+};
+
+struct KeyState
+{
+	
 	enum ButtonState
 	{
 		BUTTON_STATE_NONE,
@@ -80,6 +82,12 @@ public:
 		PUSH,			//押されている
 		PUSH_UP,		//離した瞬間
 	};
+};
+
+class Input {
+public:
+	/** @brief マウスボタンの種類 */
+	
 
 	struct DeviceEnumParameter
 	{
@@ -115,7 +123,7 @@ public:
 	* @return 判定結果、押されているならtrue
 	* @param[in] key 判定したいキー
 	*/
-	bool GetKey(KEY_INFO key_);
+	bool GetKey(KeyCode::KEY_INFO key_);
 
 	/**
 	* @brief 入力情報の更新@n
@@ -132,7 +140,7 @@ public:
 	* @return 判定結果、押された瞬間ならtrue
 	* @param[in] key 判定したいキー
 	*/
-	bool GetKeyDown(KEY_INFO key_);
+	bool GetKeyDown(KeyCode::KEY_INFO key_);
 
 	/**
 	* @brief キーが離された瞬間の判定関数@n
@@ -140,7 +148,7 @@ public:
 	* @return 判定結果、離されたならtrue
 	* @param[in] key 判定したいキー
 	*/
-	bool GetKeyUp(KEY_INFO key_);
+	bool GetKeyUp(KeyCode::KEY_INFO key_);
 
 	/**
 	* @brief クリックした瞬間判定関数@n
@@ -148,7 +156,7 @@ public:
 	* @return 判定結果(押された瞬間ならtrue)
 	* @param[in] button_type 判定したいボタンの種類
 	*/
-	bool OnMouseDown(MouseButton button_type_);
+	bool OnMouseDown(KeyCode::MouseButton button_type_);
 
 	/**
 	* @brief クリック中判定関数@n
@@ -156,7 +164,7 @@ public:
 	* @return 判定結果(クリック中瞬間ならtrue)
 	* @param[in] button_type 判定したいボタンの種類
 	*/
-	bool OnMousePush(MouseButton button_type_);
+	bool OnMousePush(KeyCode::MouseButton button_type_);
 
 	/**
 	* @brief クリック終了判定関数@n
@@ -164,14 +172,14 @@ public:
 	* @return 判定結果(クリックをやめた瞬間ならtrue)
 	* @param[in] button_type 判定したいボタンの種類
 	*/
-	bool OnMouseUp(MouseButton button_type_);
+	bool OnMouseUp(KeyCode::MouseButton button_type_);
 
 	/** @brief マウスの座標取得関数 */
 	D3DXVECTOR2 GetMousePos();
 
-	bool IsButtonPush(ButtonKind button_);
-	bool IsButtonUp(ButtonKind button_);
-	bool IsButtonDown(ButtonKind button_);
+	bool IsButtonPush(KeyCode::ButtonKind button_);
+	bool IsButtonUp(KeyCode::ButtonKind button_);
+	bool IsButtonDown(KeyCode::ButtonKind button_);
 
 	private:
 		BOOL StartGamePadControl();
@@ -204,11 +212,11 @@ public:
 		D3DXVECTOR2 mouse_move_vec_;
 
 
-		ButtonState ButtonStates[ButtonKind::BUTTON_KIND_MAX];
+		KeyState::ButtonState ButtonStates[KeyCode::ButtonKind::BUTTON_KIND_MAX];
 
-		InputState InputState[KEY_INFO::MAX_KEY_INFO];
+		KeyState::InputState InputState[KeyCode::KEY_INFO::MAX_KEY_INFO];
 
-		int KeyInfo[KEY_INFO::MAX_KEY_INFO] = {
+		int KeyInfo[KeyCode::KEY_INFO::MAX_KEY_INFO] = {
 			DIK_ESCAPE,
 			DIK_SPACE,
 			DIK_UP,

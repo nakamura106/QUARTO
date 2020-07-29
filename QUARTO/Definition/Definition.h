@@ -3,7 +3,9 @@
 
 #include"../Manager/LibraryManager.h"
 #include"../Manager/SoundManager.h"
+#include"../Manager/FbxManager.h"
 
+#define THE_FBX FBXManager::Instance()
 #define THE_ENGINE LibraryManager::Instance()->GetEngine()
 #define THE_INPUT LibraryManager::Instance()->GetInput()
 #define THE_GRAPHICS LibraryManager::Instance()->GetGraphics()

@@ -36,7 +36,8 @@ void Camera::Update()
 	THE_GRAPHICS->GetD3DDevice()->SetTransform(D3DTS_PROJECTION, &matProj);
 	//ŽË‰eÀ•W•ÏŠ·—p‚Ìs—ñŽZo endMove();
 	
-	
+	MouseRotate();
+	StickRotate();
 
 	camera_data_.forward = camera_data_.eye_pos - camera_data_.camera_pos;
 	D3DXVec3Normalize(&camera_data_.forward, &camera_data_.forward);
@@ -44,6 +45,22 @@ void Camera::Update()
 
 void Camera::Move()
 {
+	if (THE_INPUT->GetKey(KeyCode::A_KEY))
+	{
+		camera_data_.camera_pos.x--;
+	}
+	if (THE_INPUT->GetKey(KeyCode::S_KEY))
+	{
+		camera_data_.camera_pos.z++;
+	}
+	if (THE_INPUT->GetKey(KeyCode::D_KEY))
+	{
+		camera_data_.camera_pos.x++;
+	}
+	if (THE_INPUT->GetKey(KeyCode::W_KEY))
+	{
+		camera_data_.camera_pos.z--;
+	}
 }
 
 
@@ -64,19 +81,19 @@ void Camera::MouseRotate()
 
 void Camera::StickRotate()
 {
-	if (THE_INPUT->IsButtonPush(THE_INPUT->R_LEFT_STICK))
+	if (THE_INPUT->IsButtonPush(KeyCode::R_LEFT_STICK))
 	{
 		camera_data_.yaw -= 2.0f;
 	}
-	if (THE_INPUT->IsButtonPush(THE_INPUT->R_RIGHT_STICK))
+	if (THE_INPUT->IsButtonPush(KeyCode::R_RIGHT_STICK))
 	{
 		camera_data_.yaw += 2.0f;
 	}
-	if (THE_INPUT->IsButtonPush(THE_INPUT->R_UP_STICK))
+	if (THE_INPUT->IsButtonPush(KeyCode::R_UP_STICK))
 	{
 		camera_data_.pitch += 2.0f;
 	}
-	if (THE_INPUT->IsButtonPush(THE_INPUT->R_DOWN_STICK))
+	if (THE_INPUT->IsButtonPush(KeyCode::R_DOWN_STICK))
 	{
 		camera_data_.pitch -= 2.0f;
 	}

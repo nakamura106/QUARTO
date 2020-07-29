@@ -162,6 +162,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager\FbxManager.cpp" />
     <ClCompile Include="Manager\LibraryManager.cpp" />
+    <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="Manager\SoundManager.cpp" />
     <ClCompile Include="Manager\VideoManager.cpp" />
   </ItemGroup>
@@ -181,6 +182,7 @@
     <ClInclude Include="Library\Video\Video.h" />
     <ClInclude Include="Manager\FbxManager.h" />
     <ClInclude Include="Manager\LibraryManager.h" />
+    <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Manager\SoundManager.h" />
     <ClInclude Include="Manager\VideoManager.h" />
   </ItemGroup>

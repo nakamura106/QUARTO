@@ -33,7 +33,7 @@ private:
 	Camera* camera_ptr_;
 	Video* video_ptr_;
 
-	D3DXVECTOR3 pos=D3DXVECTOR3(0.0f,0.0f,0.0f);
+	D3DXVECTOR3 pos=D3DXVECTOR3(0.0f,0.0f,10.0f);
 };
 
 #endif

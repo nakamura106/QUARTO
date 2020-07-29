@@ -37,26 +37,7 @@ BOOL SetUpCooperativeLevel(LPDIRECTINPUTDEVICE8 device_)
 }
 
 //ライブラリ側のキー情報配列
-int g_KeyInfo[] = {
-	DIK_ESCAPE,
-	DIK_SPACE,
-	DIK_UP,
-	DIK_DOWN,
-	DIK_RIGHT,
-	DIK_LEFT,
-	DIK_A,
-	DIK_W,
-	DIK_S,
-	DIK_D,
-	DIK_F,
-	DIK_E,
-	DIK_Q,
-	DIK_T,
-	DIK_Y,
-	DIK_RETURN,
-	DIK_LCONTROL,
-	DIK_LSHIFT,
-};
+
 
 BOOL Input::StartGamePadControl()
 {
@@ -185,9 +166,9 @@ bool Input::InitInput()
 		return false;
 	}
 
-	for (int i = 0; i < Input::ButtonKind::BUTTON_KIND_MAX; i++)
+	for (int i = 0; i < KeyCode::ButtonKind::BUTTON_KIND_MAX; i++)
 	{
-		ButtonStates[i] = Input::ButtonState::BUTTON_STATE_NONE;
+		ButtonStates[i] = KeyState::ButtonState::BUTTON_STATE_NONE;
 	}
 
 	ZeroMemory(&curr_mouse_state_, sizeof(DIMOUSESTATE));
@@ -375,50 +356,51 @@ void Input::KeyStateUpdate()
 		return;
 	}
 
-	for (int i = 0; i < MAX_KEY_INFO; i++)
+	for (int i = 0; i < KeyCode::MAX_KEY_INFO; i++)
 	{
 		if (Key[KeyInfo[i]] & 0x80)
 		{
-			if (InputState[i] == InputState::NOT_PUSH || InputState[i] == InputState::PUSH_UP)
+			if (InputState[i] == KeyState::InputState::NOT_PUSH || InputState[i] == KeyState::InputState::PUSH_UP)
 			{
-				InputState[i] = InputState::PUSH_DOWN;
+				InputState[i] = KeyState::InputState::PUSH_DOWN;
 			}
 			else
 			{
-				InputState[i] = InputState::PUSH;
+				InputState[i] = KeyState::InputState::PUSH;
 			}
 		}
 		else
 		{
-			if (InputState[i] == InputState::PUSH || InputState[i] == InputState::PUSH_DOWN)
+			if (InputState[i] == KeyState::InputState::PUSH || InputState[i] == KeyState::InputState::PUSH_DOWN)
 			{
-				InputState[i] = InputState::PUSH_UP;
+				InputState[i] = KeyState::InputState::PUSH_UP;
 			}
 			else
 			{
-				InputState[i] = InputState::NOT_PUSH;
+				InputState[i] = KeyState::InputState::NOT_PUSH;
 			}
 		}
 	}
 }
 
-bool Input::GetKey(KEY_INFO key_)
+bool Input::GetKey(KeyCode::KEY_INFO key_)
 {
-	return (InputState[key_] == InputState::PUSH);
+	return (InputState[key_] == KeyState::InputState::PUSH);
 }
 
-bool Input::GetKeyDown(KEY_INFO key_)
+bool Input::GetKeyDown(KeyCode::KEY_INFO key_)
 {
-	return (InputState[key_] == InputState::PUSH_DOWN);
+	return (InputState[key_] == KeyState::InputState::PUSH_DOWN);
 }
 
-bool Input::GetKeyUp(KEY_INFO key_)
+bool Input::GetKeyUp(KeyCode::KEY_INFO key_)
 {
-	return (InputState[key_] == InputState::PUSH_UP);
+	return (InputState[key_] == KeyState::InputState::PUSH_UP);
 }
 
 void Input::UpdateInput()
 {
+	KeyStateUpdate();
 	UpdateMouse();
 	UpdateGamePad();
 
@@ -432,7 +414,7 @@ void Input::UpdateInput()
 	}
 }
 
-bool Input::OnMouseDown(MouseButton button_type_)
+bool Input::OnMouseDown(KeyCode::MouseButton button_type_)
 {
 	if (!(prev_mouse_state_.rgbButtons[button_type_] & MOUSE_ON_VALUE) &&
 		curr_mouse_state_.rgbButtons[button_type_] & MOUSE_ON_VALUE)
@@ -443,7 +425,7 @@ bool Input::OnMouseDown(MouseButton button_type_)
 	return false;
 }
 
-bool Input::OnMousePush(MouseButton button_type_)
+bool Input::OnMousePush(KeyCode::MouseButton button_type_)
 {
 	if (prev_mouse_state_.rgbButtons[button_type_] & MOUSE_ON_VALUE &&
 		curr_mouse_state_.rgbButtons[button_type_] & MOUSE_ON_VALUE)
@@ -454,7 +436,7 @@ bool Input::OnMousePush(MouseButton button_type_)
 	return false;
 }
 
-bool Input::OnMouseUp(MouseButton button_type_)
+bool Input::OnMouseUp(KeyCode::MouseButton button_type_)
 {
 	if (prev_mouse_state_.rgbButtons[button_type_] & MOUSE_ON_VALUE &&
 		!(curr_mouse_state_.rgbButtons[button_type_] & MOUSE_ON_VALUE))
@@ -498,58 +480,58 @@ void Input::UpdateGamePad()
 	{
 		if (FAILED(gamepad_device_->Acquire()))
 		{
-			for (int i = 0; i < ButtonKind::BUTTON_KIND_MAX; i++)
+			for (int i = 0; i < KeyCode::ButtonKind::BUTTON_KIND_MAX; i++)
 			{
-				ButtonStates[i] = ButtonState::BUTTON_STATE_NONE;
+				ButtonStates[i] = KeyState::ButtonState::BUTTON_STATE_NONE;
 			}
 		}
 	}
 
-	bool is_push[ButtonKind::BUTTON_KIND_MAX] = { false };
+	bool is_push[KeyCode::ButtonKind::BUTTON_KIND_MAX] = { false };
 
 	//左アナログスティック※500のとこでデッドゾーン調整
 	if (pad_data.lX < -500)
 	{
-		is_push[ButtonKind::L_LEFT_STICK] = true;
+		is_push[KeyCode::ButtonKind::L_LEFT_STICK] = true;
 	}
 	else if (pad_data.lX > 500)
 	{
-		is_push[ButtonKind::L_RIGHT_STICK] = true;
+		is_push[KeyCode::ButtonKind::L_RIGHT_STICK] = true;
 	}
 
 	if (pad_data.lY < -500)
 	{
-		is_push[ButtonKind::L_UP_STICK] = true;
+		is_push[KeyCode::ButtonKind::L_UP_STICK] = true;
 	}
 	else if (pad_data.lY > 500)
 	{
-		is_push[ButtonKind::L_DOWN_STICK] = true;
+		is_push[KeyCode::ButtonKind::L_DOWN_STICK] = true;
 	}
 	if (pad_data.lZ > 50000)
 	{
-		is_push[ButtonKind::LEFT_T_BUTTON] = true;
+		is_push[KeyCode::ButtonKind::LEFT_T_BUTTON] = true;
 	}
 	else if (pad_data.lZ < 500)
 	{
-		is_push[ButtonKind::RIGHT_T_BUTTON] = true;
+		is_push[KeyCode::ButtonKind::RIGHT_T_BUTTON] = true;
 	}
 
 	if (pad_data.lRx < 10000)
 	{
-		is_push[ButtonKind::R_LEFT_STICK] = true;
+		is_push[KeyCode::ButtonKind::R_LEFT_STICK] = true;
 	}
 	else if (pad_data.lRx > 40000)
 	{
-		is_push[ButtonKind::R_RIGHT_STICK] = true;
+		is_push[KeyCode::ButtonKind::R_RIGHT_STICK] = true;
 	}
 
 	if (pad_data.lRy < 10000)
 	{
-		is_push[ButtonKind::R_UP_STICK] = true;
+		is_push[KeyCode::ButtonKind::R_UP_STICK] = true;
 	}
 	else if (pad_data.lRy > 40000)
 	{
-		is_push[ButtonKind::R_DOWN_STICK] = true;
+		is_push[KeyCode::ButtonKind::R_DOWN_STICK] = true;
 	}
 	// 十字キー
 	if (pad_data.rgdwPOV[0] != 0xFFFFFFFF)
@@ -562,20 +544,20 @@ void Input::UpdateGamePad()
 
 		if (x < -0.01f)
 		{
-			is_push[ButtonKind::LEFT_BUTTON] = true;
+			is_push[KeyCode::ButtonKind::LEFT_BUTTON] = true;
 		}
 		else if (x > 0.01f)
 		{
-			is_push[ButtonKind::RIGHT_BUTTON] = true;
+			is_push[KeyCode::ButtonKind::RIGHT_BUTTON] = true;
 		}
 
 		if (y > 0.01f)
 		{
-			is_push[ButtonKind::UP_BUTTON] = true;
+			is_push[KeyCode::ButtonKind::UP_BUTTON] = true;
 		}
 		else if (y < -0.01f)
 		{
-			is_push[ButtonKind::DOWN_BUTTON] = true;
+			is_push[KeyCode::ButtonKind::DOWN_BUTTON] = true;
 		}
 	}
 
@@ -591,36 +573,36 @@ void Input::UpdateGamePad()
 	}
 
 
-	for (int i = 0; i < ButtonKind::BUTTON_KIND_MAX; i++)
+	for (int i = 0; i < KeyCode::ButtonKind::BUTTON_KIND_MAX; i++)
 	{
 		if (is_push[i] == true)
 		{
-			if (ButtonStates[i] == ButtonState::BUTTON_STATE_NONE)
+			if (ButtonStates[i] == KeyState::ButtonState::BUTTON_STATE_NONE)
 			{
-				ButtonStates[i] = ButtonState::BUTTON_STATE_DOWN;
+				ButtonStates[i] = KeyState::ButtonState::BUTTON_STATE_DOWN;
 			}
 			else
 			{
-				ButtonStates[i] = ButtonState::BUTTON_STATE_PUSH;
+				ButtonStates[i] = KeyState::ButtonState::BUTTON_STATE_PUSH;
 			}
 		}
 		else
 		{
-			if (ButtonStates[i] == ButtonState::BUTTON_STATE_PUSH)
+			if (ButtonStates[i] == KeyState::ButtonState::BUTTON_STATE_PUSH)
 			{
-				ButtonStates[i] = ButtonState::BUTTON_STATE_UP;
+				ButtonStates[i] = KeyState::ButtonState::BUTTON_STATE_UP;
 			}
 			else
 			{
-				ButtonStates[i] = ButtonState::BUTTON_STATE_NONE;
+				ButtonStates[i] = KeyState::ButtonState::BUTTON_STATE_NONE;
 			}
 		}
 	}
 }
 
-bool Input::IsButtonPush(ButtonKind button_)
+bool Input::IsButtonPush(KeyCode::ButtonKind button_)
 {
-	if (ButtonStates[button_] == ButtonState::BUTTON_STATE_PUSH)
+	if (ButtonStates[button_] == KeyState::ButtonState::BUTTON_STATE_PUSH)
 	{
 		return true;
 	}
@@ -628,9 +610,9 @@ bool Input::IsButtonPush(ButtonKind button_)
 	return false;
 }
 
-bool Input::IsButtonUp(ButtonKind button_)
+bool Input::IsButtonUp(KeyCode::ButtonKind button_)
 {
-	if (ButtonStates[button_] == ButtonState::BUTTON_STATE_UP)
+	if (ButtonStates[button_] == KeyState::ButtonState::BUTTON_STATE_UP)
 	{
 		return true;
 	}
@@ -638,9 +620,9 @@ bool Input::IsButtonUp(ButtonKind button_)
 	return false;
 }
 
-bool Input::IsButtonDown(ButtonKind button_)
+bool Input::IsButtonDown(KeyCode::ButtonKind button_)
 {
-	if (ButtonStates[button_] == ButtonState::BUTTON_STATE_DOWN)
+	if (ButtonStates[button_] == KeyState::ButtonState::BUTTON_STATE_DOWN)
 	{
 		return true;
 	}

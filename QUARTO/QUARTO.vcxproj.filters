@@ -75,9 +75,6 @@
     <ClCompile Include="Manager\LibraryManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Library\Scene\BaseScene.cpp">
-      <Filter>Library\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Library\FBX\FBX.cpp">
       <Filter>Library\FBX</Filter>
     </ClCompile>

@@ -127,14 +127,18 @@ public:
 
 	const LPDIRECT3DDEVICE9 GetD3DDevice(void);
 
+	void SetRenderMode(ERenderMode mode_, bool enableAlpa_);
+
+	bool SetUpViewPort(D3DPRESENT_PARAMETERS* present_param_);
+
+	void SetLight();
 
     private:
-		void SetRenderMode(ERenderMode mode_, bool enableAlpa_);
+		
 		bool CreateGraphicsInterface();
 		bool CreateGraphicsDevice(D3DPRESENT_PARAMETERS* present_param_);
 		bool CreateFontDevice();
-		bool SetUpViewPort(D3DPRESENT_PARAMETERS* present_param_);
-		void SetLight();
+		
 
 	private:
 		LPDIRECT3D9 interface_;

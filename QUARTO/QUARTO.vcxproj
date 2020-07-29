@@ -152,7 +152,6 @@
     <ClCompile Include="Library\FBX\FBX.cpp" />
     <ClCompile Include="Library\Graphics\Graphic.cpp" />
     <ClCompile Include="Library\Input\Input.cpp" />
-    <ClCompile Include="Library\Scene\BaseScene.cpp" />
     <ClCompile Include="Library\Scene\GameEndScene\GameEndScene.cpp" />
     <ClCompile Include="Library\Scene\GameMainScene\GameMainScene.cpp" />
     <ClCompile Include="Library\Scene\HelpScene\HelpScene.cpp" />

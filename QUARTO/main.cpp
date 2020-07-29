@@ -4,6 +4,7 @@
 #include"Manager/LibraryManager.h"
 #include"Manager/SoundManager.h"
 #include"Manager/FbxManager.h"
+#include"Manager/SceneManager.h"
 #include"Definition/Definition.h"
 #include"Library/Engine/Engine.h"
 #include"Library/Input/Input.h"
@@ -23,23 +24,6 @@ int WINAPI WinMain(HINSTANCE hinstance,
 		return 0;
 	}
 
-	//THE_VIDEO->Load("Res/Movie/【PS3】-El-Shaddai-エルシャダイ-　_ルシフェルver_-高画質版.avi");
-	//THE_VIDEO->Play(5000);
-	Graphics::TEXTURE_DATA tex;
-	THE_SOUND->RegisterSound();
-	THE_FBX->LoadFbxMesh("Box","Res/Fbx/WorldBoxA02.fbx");
-	THE_GRAPHICS->LoadTexture("Res/Tex/Title_3D_A.png",&tex);
-
-	D3DXVECTOR3 pos=D3DXVECTOR3(0,-1,0);
-	D3DXMATRIX world;
-	D3DXMATRIX move;
-	D3DXMATRIX scale;
-
-
-	D3DXMatrixIdentity(&world);
-	D3DXMatrixScaling(&scale,250,350,250);
-	D3DXMatrixTranslation(&move,pos.x,pos.y,pos.z);
-	D3DXMatrixMultiply(&world, &scale, &move);
 	
 	while (true)
 	{
@@ -64,20 +48,10 @@ int WINAPI WinMain(HINSTANCE hinstance,
 		else
 		{
 		
-			THE_CAMERA->Update();
+			THE_SCENE->Update();
 
-			THE_INPUT->UpdateInput();
-			
-			THE_GRAPHICS->DrawStart();
+			THE_SCENE->Draw();
 
-			if (THE_INPUT->GetKey(KeyCode::A_KEY)||THE_INPUT->IsButtonPush(KeyCode::A_BUTTON)||THE_INPUT->OnMousePush(KeyCode::LEFT))
-			{
-				THE_GRAPHICS->DrawTexture(&tex,D3DXVECTOR2(0,0));
-				THE_GRAPHICS->DrawFont(0, 0, "ABCDE", Graphics::FontSize::SMALL, Graphics::BLACK);
-			}
-			
-			THE_FBX->DrawFbx("Box", world);
-			THE_GRAPHICS->DrawEnd();
 			
 		}
 	}

@@ -3,6 +3,7 @@
 #include <thread>
 #include"Manager/SceneManager.h"
 #include"Definition/Definition.h"
+#include"Library/Scene/TitleScene/TitleScene.h"
 
 int WINAPI WinMain(HINSTANCE hinstance,
 	HINSTANCE hPrevInstance,
@@ -17,7 +18,7 @@ int WINAPI WinMain(HINSTANCE hinstance,
 	}
 
 	
-	while (true)
+	while (THE_SCENE->GetTitle()->GetTitleInfo()->title_state != TitleScene::TitleState::End)
 	{
 		bool message_ret = false;
 		MSG msg;

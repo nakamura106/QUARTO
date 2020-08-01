@@ -9,21 +9,49 @@
 class TitleScene :public BaseScene
 {
 public:
-	TitleScene();
+	enum class TitleState
+	{
+		title,
+		Help,
+		Game,
+		End,
+	};
 
-	void InitScene()override;
-	void UpdateScene()override;
-	void EndScene()override;
-
-	void Draw()override;
-
+	enum class TitleNum
+	{
+		Title1,
+		Title2,
+	};
+private:
 private:
 	D3DXVECTOR3 pos = D3DXVECTOR3(0, -1, 0);
 	D3DXMATRIX world;
 	D3DXMATRIX move;
 	D3DXMATRIX scale;
 
+	struct TitleInfo
+	{
+		TitleState title_state;
+		TitleNum title_num;
+	}title_info;
+
 	Graphics::TEXTURE_DATA tex;
+
+
+public:
+	TitleScene();
+
+	void InitScene()override;
+	void UpdateScene()override;
+	void EndScene()override;
+
+	const TitleInfo* GetTitleInfo()const { return &title_info; }
+
+	void Draw()override;
+
+
+
+
 };
 
 

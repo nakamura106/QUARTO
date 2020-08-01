@@ -16,6 +16,18 @@ public:
 
 private:
 	Graphics::TEXTURE_DATA tex;
+
+	enum class MainStatus
+	{
+		Game,
+		Result,
+	}GameState;
+
+	enum class ContinueorEnd
+	{
+		Continue,
+		End,
+	}CoE;
 };
 
 

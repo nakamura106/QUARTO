@@ -43,6 +43,6 @@ SoundManager::SoundManager()
 	
 	
 	
-	sound_file["BGM"] = "Res/Sound/bgm055_loop.wav";
+	sound_file["BGM"] = "Res/Sound/titlebgm_loop.wav";
 
 }

@@ -14,6 +14,7 @@ void TitleScene::InitScene()
 	//THE_VIDEO->Play(5000);
 	
 	THE_SOUND->RegisterSound();
+	THE_SOUND->SoundBGM("BGM");
 	THE_FBX->LoadFbxMesh("Box", "Res/Fbx/WorldBoxA02.fbx");
 	THE_GRAPHICS->LoadTexture("Res/Tex/Title_3D_A.png", &tex);
 

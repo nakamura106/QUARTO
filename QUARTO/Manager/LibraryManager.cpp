@@ -19,11 +19,13 @@ LibraryManager* LibraryManager::Instance()
 
 LibraryManager::LibraryManager()
 {
+
+	video_ptr_ = new Videoclass;
 	camera_ptr_ = new Camera(pos);
 	engine_ptr_ = new Engine;
+
 	graphics_ptr_ = new Graphics;
 	input_ptr_ = new Input;
-	video_ptr_ = new Video;
 }
 
 void LibraryManager::Init()
@@ -32,6 +34,6 @@ void LibraryManager::Init()
 	engine_ptr_ = new Engine;
 	graphics_ptr_ = new Graphics;
 	input_ptr_ = new Input;
-	video_ptr_ = new Video;
+	video_ptr_ = new Videoclass;
 }
 

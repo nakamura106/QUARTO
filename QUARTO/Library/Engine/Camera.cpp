@@ -67,7 +67,7 @@ void Camera::Move()
 
 void Camera::MouseRotate()
 {
-	SetCursorPos(960, 540);
+	//SetCursorPos(960, 540);
 	camera_data_.yaw += (THE_INPUT->GetMousePos().x - 960) / 1920 * 50;//ここでカメラ感度変更可能
 	camera_data_.pitch -= (THE_INPUT->GetMousePos().y - 540) / 1080 * 20;
 	if (camera_data_.pitch > 90.0f) { camera_data_.pitch = 180.0f - camera_data_.pitch; }

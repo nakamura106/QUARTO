@@ -14,4 +14,7 @@
 #define THE_SOUND SoundManager::Instance()
 #define THE_CAMERA LibraryManager::Instance()->GetCamera()
 #define THE_VIDEO LibraryManager::Instance()->GetVideo()
+
+#define WndH 1080
+#define WndW 1920
 #endif // !Difinition_H_

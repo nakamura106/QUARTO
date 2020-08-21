@@ -10,9 +10,7 @@ TitleScene::TitleScene()
 
 void TitleScene::InitScene()
 {
-	//THE_VIDEO->Load("Res/Movie/【PS3】-El-Shaddai-エルシャダイ-　_ルシフェルver_-高画質版.avi");
-	//THE_VIDEO->Play(5000);
-	
+
 	//THE_SOUND->RegisterSound();
 	//THE_SOUND->SoundBGM("BGM");
 	//THE_FBX->LoadFbxMesh("Box", "Res/Fbx/WorldBoxA02.fbx");
@@ -34,6 +32,8 @@ void TitleScene::InitScene()
 void TitleScene::UpdateScene()
 {
 	
+	
+
 	if (THE_INPUT->GetKeyDown(KeyCode::ONE_KEY))
 	{
 		if (title_info.title_num == TitleNum::Title1)
@@ -110,6 +110,6 @@ void TitleScene::Draw()
 		THE_GRAPHICS->DrawFont(0, 45, "1 hand 1 minute:3_key", Graphics::FontSize::SMALL, Graphics::BLACK);
 
 	}
-	//THE_FBX->DrawFbx("Box", world);
-
+	THE_FBX->DrawFbx("Box", world);
+	
 }

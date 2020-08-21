@@ -10,12 +10,12 @@ int WINAPI WinMain(HINSTANCE hinstance,
 	LPSTR lpCmpLine,
 	INT nCmdShow)
 {
-	//LibraryManager::Instance()->Init();
 	// ƒGƒ“ƒWƒ“‚Ì‰Šú‰»
 	if (THE_ENGINE->InitEngine(1920, 1080, "Library") == false)
 	{
 		return 0;
 	}
+
 
 	
 	while (THE_SCENE->GetTitle()->GetTitleInfo()->title_state != TitleScene::TitleState::End)

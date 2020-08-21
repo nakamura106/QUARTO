@@ -8,13 +8,13 @@ class Engine;
 class Graphics;
 class Camera;
 class Input;
-class Video;
+class Videoclass;
 
 class LibraryManager
 {
 public:
 	static LibraryManager* Instance();
-	LibraryManager();
+	
 
 	void Init();
 
@@ -22,8 +22,11 @@ public:
 	Graphics* GetGraphics() { return graphics_ptr_; };
 	Input* GetInput() { return input_ptr_; }
 	Camera* GetCamera() { return camera_ptr_; };
-	Video* GetVideo() { return video_ptr_; }
+	Videoclass* GetVideo() { return video_ptr_; }
 
+private:
+	LibraryManager();
+	LibraryManager(LibraryManager& librarymanager) = delete;
 private:
 	static LibraryManager* instance_;
 
@@ -31,7 +34,7 @@ private:
 	Graphics* graphics_ptr_;
 	Input* input_ptr_;
 	Camera* camera_ptr_;
-	Video* video_ptr_;
+	Videoclass* video_ptr_;
 
 	D3DXVECTOR3 pos=D3DXVECTOR3(0.0f,0.0f,10.0f);
 };

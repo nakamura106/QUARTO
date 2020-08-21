@@ -73,7 +73,7 @@ bool Engine::MakeWindow(int width_, int height_, const char* title_)
 	hWnd_ = CreateWindowA(
 		WINDOW_CLASS_NAME,
 		title_,
-		(WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME) | WS_VISIBLE,
+		(WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME),
 		CW_USEDEFAULT,
 		0,
 		width_,

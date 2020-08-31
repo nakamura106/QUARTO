@@ -11,6 +11,8 @@ GameMainScene::GameMainScene()
 
 void GameMainScene::InitScene()
 {
+	THE_SOUND->SoundBGM("Game");
+
 	GameState = MainStatus::Game;
 	CoE = ContinueorEnd::Continue;
 	//THE_GRAPHICS->LoadTexture("Res/Tex/END.png",&tex);
@@ -21,6 +23,8 @@ void GameMainScene::UpdateScene()
 {
 	if (THE_INPUT->GetKeyDown(KeyCode::ONE_KEY)&&GameState == MainStatus::Game)
 	{
+		THE_SOUND->Stop("Game");
+		THE_SOUND->SoundBGM("Result");
 		GameState = MainStatus::Result;
 	}
 	else if (THE_INPUT->GetKeyDown(KeyCode::ONE_KEY) && GameState == MainStatus::Result)
@@ -33,11 +37,11 @@ void GameMainScene::UpdateScene()
 		CoE = ContinueorEnd::End;
 		THE_SCENE->SetSceneStep(SceneStep::End);
 	}
-	
 }
 
 void GameMainScene::EndScene()
 {
+	THE_SOUND->Stop("Result");
 	//THE_GRAPHICS->ReleaseTexture(&tex);
 	THE_SCENE->SetSceneStep(SceneStep::Init);
 	if (CoE == ContinueorEnd::End)

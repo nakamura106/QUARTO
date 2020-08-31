@@ -11,7 +11,7 @@ HelpScene::HelpScene()
 
 void HelpScene::InitScene()
 {
-	THE_VIDEO->LoadFile(L"Res/Movie/ジョジョ.avi");
+	//THE_VIDEO->LoadFile(L"Res/Movie/ジョジョ.avi");
 	
 	THE_SCENE->SetSceneStep(SceneStep::Main);
 	
@@ -19,25 +19,27 @@ void HelpScene::InitScene()
 
 void HelpScene::UpdateScene()
 {
-	THE_VIDEO->WaitMessage();
+	//THE_VIDEO->WaitMessage();
 
 	if (THE_INPUT->GetKeyDown(KeyCode::TWO_KEY))
 	{
-		THE_VIDEO->Play(D3DXVECTOR2(540, 0));
+		//THE_VIDEO->Play(D3DXVECTOR2(540, 0));
 	}
 	if (THE_INPUT->GetKeyDown(KeyCode::THREE_KEY))
 	{
-		THE_VIDEO->Stop();
+		//THE_VIDEO->Stop();
 	}
 	if (THE_INPUT->GetKeyDown(KeyCode::ONE_KEY))
 	{
 		THE_SCENE->SetSceneStep(SceneStep::End);
 	}
+
+	
 }
 
 void HelpScene::EndScene()
 {
-	THE_VIDEO->Stop();
+	//THE_VIDEO->Stop();
 	THE_SCENE->SetSceneStep(SceneStep::Init);
 	THE_SCENE->SetSceneId(SceneId::Title);
 }

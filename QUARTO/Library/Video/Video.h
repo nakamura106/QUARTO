@@ -60,6 +60,7 @@ public:
 
 	void Stop();
 
+	
 private:
 	// 描画ウィンドウの設定
 	HWND     hNotifyWnd;        // DirectShowライブラリからのメッセージ送信先ウィンドウ

@@ -15,7 +15,9 @@ SoundManager* SoundManager::Instance()
 
 void SoundManager::RegisterSound()
 {
-	pAudio->Load("BGM",sound_file["BGM"]);
+	pAudio->Load("Title",sound_file["Title"]);
+	pAudio->Load("Game",sound_file["Game"]);
+	pAudio->Load("Result",sound_file["Result"]);
 	
 }
 
@@ -27,6 +29,11 @@ void SoundManager::SoundBGM(std::string key_,int vol_)
 void SoundManager::SoundSE(std::string key_, int vol_)
 {
 	pAudio->Play(key_, vol_);
+}
+
+void SoundManager::Stop(std::string name_)
+{
+	pAudio->Stop(name_);
 }
 
 void SoundManager::ReleaseSound()
@@ -43,6 +50,9 @@ SoundManager::SoundManager()
 	
 	
 	
-	sound_file["BGM"] = "Res/Sound/titlebgm_loop.wav";
+	sound_file["Title"] = "Res/Sound/BGM/Wading.wav";
+	sound_file["Game"] = "Res/Sound/BGM/Game.wav";
+	sound_file["Result"] = "Res/Sound/BGM/Result.wav";
 
+	RegisterSound();
 }

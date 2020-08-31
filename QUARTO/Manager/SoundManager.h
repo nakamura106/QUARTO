@@ -19,6 +19,8 @@ public:
 	void SoundBGM(std::string key_,int vol_ = -1000);
 	void SoundSE(std::string key_, int vol_ = -1000);
 
+	void Stop(std::string name_);
+
 	void ReleaseSound();
 	
 

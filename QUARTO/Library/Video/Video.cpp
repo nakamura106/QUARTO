@@ -233,7 +233,6 @@ void Videoclass::LoadFile(LPCWCHAR filename_)
 		return;
 	}
 	SetMessage();
-	SetWind();
 }
 
 void Videoclass::SetMessage()
@@ -248,20 +247,26 @@ void Videoclass::SetMessage()
 
 void Videoclass::SetWind()
 {	
+
 	HRESULT hr;
 
-	hr = pVideoWindow->put_Owner(NULL);
+	hr = pVideoWindow->put_Owner((OAHWND)THE_ENGINE->GetWindowHandle());
 	if (FAILED(hr))
 	{
 		return;
 	}
-	hr = pVideoWindow->put_WindowStyle(WS_CHILD);
+//	hr = pVideoWindow->put_WindowStyle(WS_CHILD);
+	hr = pVideoWindow->put_WindowStyle(WS_CHILD | WS_CLIPCHILDREN);
 	if (FAILED(hr))
 	{
 		return;
 	}
-	
 	hr = pVideoWindow->put_Visible(OAFALSE);
+	if (FAILED(hr))
+	{
+		return;
+	}
+	hr = pVideoWindow->SetWindowForeground(OATRUE);
 	if (FAILED(hr))
 	{
 		return;
@@ -270,13 +275,16 @@ void Videoclass::SetWind()
 	if (FAILED(hr))
 	{
 		return;
-	}	
+	}
+
 	
 }
 
 void Videoclass::Play(D3DXVECTOR2 pos_)
 {
 	HRESULT hr;
+
+	SetWind();
 	hr=pVideoWindow->SetWindowPosition(pos_.x, pos_.y,500, 500);
 	if (FAILED(hr))
 	{
@@ -324,14 +332,15 @@ void Videoclass::Stop()
 	{
 		return;
 	}
-	hr = pVideoWindow->put_Visible(OAFALSE);
-	if (FAILED(hr))
-	{
-		return;
-	}	
 	hr = pVideoWindow->put_Owner(NULL);
 	if (FAILED(hr))
 	{
 		return;
 	}
+	hr = pVideoWindow->put_Visible(OAFALSE);
+	if (FAILED(hr))
+	{
+		return;
+	}	
+
 }

@@ -11,8 +11,8 @@ TitleScene::TitleScene()
 void TitleScene::InitScene()
 {
 
-	//THE_SOUND->RegisterSound();
-	//THE_SOUND->SoundBGM("BGM");
+	
+	THE_SOUND->SoundBGM("Title");
 	//THE_FBX->LoadFbxMesh("Box", "Res/Fbx/WorldBoxA02.fbx");
 	//THE_GRAPHICS->LoadTexture("Res/Tex/Title_3D_A.png", &tex);
 
@@ -75,6 +75,8 @@ void TitleScene::EndScene()
 {
 	//THE_GRAPHICS->ReleaseTexture(&tex);
 	//THE_FBX->ReleaseFbxMesh("Box");
+
+	THE_SOUND->Stop("Title");
 
 	THE_SCENE->SetSceneStep(SceneStep::Init);
 	if (title_info.title_state == TitleState::Game)

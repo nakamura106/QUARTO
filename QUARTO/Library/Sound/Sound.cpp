@@ -186,8 +186,8 @@ void AudioPlayer::Play(
 	else {
 		sound->SetVolume(volume_);
 		sound->Play(0, 0, 0);
-		sound->SetCurrentPosition(0);
 	}
+	sound->SetCurrentPosition(0);
 }
 
 //----------------------------------

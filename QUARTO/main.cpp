@@ -16,7 +16,9 @@ int WINAPI WinMain(HINSTANCE hinstance,
 		return 0;
 	}
 
-
+	// 「ロード中…」だけメインに入る前に読み込む
+	THE_GRAPHICS->LoadTexture("Res/Tex/Loading_BackGround.bmp", "loading_background");
+	THE_GRAPHICS->LoadTexture("Res/Tex/AngelWand.png", "now_loading");
 	
 	while (THE_SCENE->GetTitle()->GetTitleInfo()->title_state != TitleScene::TitleState::End)
 	{

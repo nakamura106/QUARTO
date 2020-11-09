@@ -7,6 +7,7 @@
 #include <vector>
 #include <fbxsdk.h>
 #include <Windows.h>
+#include <map>
 
 
 
@@ -73,6 +74,23 @@ public:
 		float tv;
 	};
 
+	struct CustomVertex2D {
+		// 頂点座標
+		float x;		// x軸座標
+		float y;		// y軸座標
+		float z;		// z軸座標
+
+		// 除算数
+		float rhw;		// 除算数
+
+		// ポリゴンの色
+		DWORD color;	// 色情報
+
+		// テクスチャ座標
+		float tu;		// uテクスチャ座標
+		float tv;		// vテクスチャ座標
+	};
+
 	enum ERenderMode
 	{
 		NORMAL,		// 書き込み
@@ -122,8 +140,44 @@ public:
 	*/
 	bool LoadTexture(const char* file_name_, TEXTURE_DATA* texture_);
 
+	/** LoadTextureのオーバーロード
+	* @param[in] file_name_ 読み込むテクスチャのファイルの名前
+	* @param[in] key_name_ 読み込むファイルに名前を付ける
+	*/
+	bool LoadTexture(const std::string file_name_, std::string key_name_);
+
 	//画像まるまる一枚描画
 	void DrawTexture(TEXTURE_DATA* texture_, D3DXVECTOR2 pos_);
+
+	/** DrawTextureのオーバーロード
+	* @brief 2D用描画関数
+	* @param[in] p_texture_ds_ テクスチャのデータ
+	* @param[in] pos_ テクスチャの位置(x,y)
+	* @param[in] transparency_ テクスチャの透過度
+	* @param[in] tex_width テクスチャの横幅
+	* @param[in] tex_height テクスチャの縦幅
+	*/
+	void DrawTexture(
+		TEXTURE_DATA* p_texture_,
+		D3DXVECTOR2 pos_,
+		UCHAR transparency_ = 255,
+		int tex_width = NULL,
+		int tex_height = NULL);
+
+	/**
+	* @brief 2D用アニメーション関数
+	* @param[in] p_texture_ds_ テクスチャのデータ
+	* @param[in] pos_ テクスチャの位置(x,y)
+	* @param[in] split_x_ 横の分割数
+	* @param[in] split_y_ 縦の分割数
+	* @param[in] animation_graph_num_ アニメーションするテクスチャの番号(左上から右下に向けて)
+	*/
+	void Animation2D(
+		TEXTURE_DATA* p_texture_,
+		D3DXVECTOR2 pos_,
+		int split_x_,
+		int split_y_,
+		int animation_graph_num_);
 
 	/*解放関数
 	第一引数で指定した画像を解放する
@@ -146,17 +200,27 @@ public:
 
 	void SetLight();
 
+	TEXTURE_DATA* GetTexture(std::string key_name_) {
+		if (HasKeyName(key_name_) == false)
+		{
+			return nullptr;
+		}
+		return m_texture_list[key_name_];
+	}
+
     private:
 		
 		bool CreateGraphicsInterface();
 		bool CreateGraphicsDevice(D3DPRESENT_PARAMETERS* present_param_);
 		bool CreateFontDevice();
-		
+		bool HasKeyName(std::string key_name_);
 
 	private:
 		LPDIRECT3D9 interface_;
 		LPDIRECT3DDEVICE9 device_;
 		LPD3DXFONT fontlist_[FontSize::FONTSIZE_MAX];
+
+		std::map<std::string, TEXTURE_DATA*> m_texture_list;
 
 };
 

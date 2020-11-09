@@ -259,6 +259,51 @@ bool Graphics::LoadTexture(const char* file_name_, TEXTURE_DATA* texture_)
 	return true;
 }
 
+bool Graphics::LoadTexture(const std::string file_name_, std::string key_name_)
+{
+	if (HasKeyName(key_name_) == true)
+	{
+		return false;
+	}
+	m_texture_list[key_name_] = new TEXTURE_DATA;
+
+	D3DXIMAGE_INFO info;
+
+	D3DXGetImageInfoFromFileA(file_name_.c_str(), &info);
+
+	if (FAILED(D3DXCreateTextureFromFileExA(device_,
+		file_name_.c_str(),
+		info.Width,
+		info.Height,
+		1,
+		0,
+		D3DFMT_A8R8G8B8,
+		D3DPOOL_MANAGED,
+		D3DX_DEFAULT,
+		D3DX_DEFAULT,
+		0x0000ff00,
+		nullptr,
+		nullptr,
+		&m_texture_list[key_name_]->texture)))
+	{
+		return false;
+	}
+	else
+	{
+		D3DSURFACE_DESC desc;
+
+		if (FAILED(m_texture_list[key_name_]->texture->GetLevelDesc(0, &desc)))
+		{
+			m_texture_list[key_name_]->texture->Release();
+			m_texture_list[key_name_]->texture = NULL;
+			return false;
+		}
+		m_texture_list[key_name_]->width = (float)desc.Width;
+		m_texture_list[key_name_]->height = (float)desc.Height;
+	}
+	return true;
+}
+
 void Graphics::DrawTexture(TEXTURE_DATA* texture_, D3DXVECTOR2 pos_)
 {
 	CUSTOM_VERTEX bg[4] =
@@ -280,7 +325,36 @@ void Graphics::DrawTexture(TEXTURE_DATA* texture_, D3DXVECTOR2 pos_)
 	device_->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, bg, sizeof(CUSTOM_VERTEX));
 }
 
+void Graphics::DrawTexture(TEXTURE_DATA* p_texture_, D3DXVECTOR2 pos_, UCHAR transparency_, int tex_width, int tex_height)
+{
+	if (tex_width == NULL)
+	{
+		tex_width = p_texture_->width;
+	}
+	if (tex_height == NULL)
+	{
+		tex_height = p_texture_->height;
+	}
 
+	DWORD color = D3DCOLOR_RGBA(255, 255, 255, transparency_);
+	CustomVertex2D cv[] = {
+		{pos_.x, pos_.y, 0.0f, 1.0f, color, 0.0f, 0.0f},
+		{pos_.x + tex_width, pos_.y, 0.0f, 1.0f , color, 1.0f, 0.0f},
+		{pos_.x + tex_width, pos_.y + tex_height, 0.0f, 1.0f, color, 1.0f, 1.0f},
+		{pos_.x, pos_.y + tex_height, 0.0f, 1.0f, color, 0.0f, 1.0f}
+	};
+
+	device_->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
+
+	device_->SetTexture(0, p_texture_->texture);
+
+	device_->DrawPrimitiveUP(
+		D3DPT_TRIANGLEFAN,
+		2,
+		cv,
+		sizeof(CustomVertex2D)
+	);
+}
 
 //UV用
 void Graphics::DrawUIUVTexture(TEXTURE_DATA * texture_, D3DXVECTOR2 pos_, float sprite_width_, float sprite_height_, float tu_, float tv_)
@@ -303,6 +377,38 @@ void Graphics::DrawUIUVTexture(TEXTURE_DATA * texture_, D3DXVECTOR2 pos_, float 
 
 	device_->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, effect, sizeof(CUSTOM_VERTEX));
 
+}
+
+void Graphics::Animation2D(TEXTURE_DATA* p_texture_, D3DXVECTOR2 pos_, int split_x_, int split_y_, int animation_graph_num_)
+{
+	// アニメーションする番号(x軸,y軸)
+	int animation_x = (animation_graph_num_ % split_x_);
+	int animation_y = (animation_graph_num_ / split_y_) + 1;
+
+	float tu = 1.0f / split_x_;
+	float tv = 1.0f / split_y_;
+
+	float tu_num = tu * animation_x;
+	float tv_num = tv * animation_y;
+
+	int graph_width = p_texture_->width / split_x_;
+	int graph_height = p_texture_->height / split_y_;
+
+	CustomVertex2D cv[] = {
+		{pos_.x, pos_.y, 0.0f, 1.0f, 0xffffffff, tu_num, tv_num},
+		{pos_.x + graph_width, pos_.y, 0.0f, 1.0f , 0xffffffff, tu_num + tu, tv_num},
+		{pos_.x + graph_width, pos_.y + graph_height, 0.0f, 1.0f, 0xffffffff, tu_num + tu, tv_num + tv},
+		{pos_.x, pos_.y + graph_height, 0.0f, 1.0f, 0xffffffff, tu_num, tv_num + tv}
+	};
+
+	device_->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
+	device_->SetTexture(0, p_texture_->texture);
+	device_->DrawPrimitiveUP(
+		D3DPT_TRIANGLEFAN,
+		2,
+		cv,
+		sizeof(CustomVertex2D)
+	);
 }
 
 // テクスチャーの解放
@@ -397,6 +503,17 @@ bool Graphics::CreateFontDevice()
 		}
 	}
 
+	return true;
+}
+
+bool Graphics::HasKeyName(std::string key_name_)
+{
+	auto it = m_texture_list.find(key_name_);
+
+	if (it == m_texture_list.end())
+	{
+		return false;
+	}
 	return true;
 }
 

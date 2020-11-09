@@ -52,6 +52,12 @@
     <Filter Include="Library\Video">
       <UniqueIdentifier>{2f16155a-f2c8-4dcb-8ce5-42c670f43bec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\UI">
+      <UniqueIdentifier>{bdf99418-358c-43f9-bc9c-d63feef44858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\UI\SceneUIManager">
+      <UniqueIdentifier>{6624e3b9-84f5-4c76-8041-b4ff2b927c63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -107,6 +113,12 @@
     </ClCompile>
     <ClCompile Include="Library\Scene\TitleScene\TitleObject.cpp">
       <Filter>Library\Scene\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\NowLoading.cpp">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\SceneUIManager\TitleUIManager.cpp">
+      <Filter>ソース ファイル\UI\SceneUIManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +178,18 @@
     </ClInclude>
     <ClInclude Include="Library\Scene\TitleScene\TitleObject.h">
       <Filter>Library\Scene\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIBase.h">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\NowLoading.h">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\SceneUIManager\TitleUIManager.h">
+      <Filter>ソース ファイル\UI\SceneUIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\SceneUIManager\SceneUIManager.h">
+      <Filter>ソース ファイル\UI\SceneUIManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

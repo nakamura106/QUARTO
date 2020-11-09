@@ -3,8 +3,8 @@
 
 #include"../BaseScene.h"
 #include"../../Graphics/Graphics.h"
-
-
+#include "../../../UI/NowLoading.h"
+#include "../../../UI/SceneUIManager/TitleUIManager.h"
 
 class TitleScene :public BaseScene
 {
@@ -49,8 +49,18 @@ public:
 
 	void Draw()override;
 
+private:
+	static DWORD WINAPI Load(LPVOID param_);
 
+private:
+	HANDLE m_thread_handle;
+	DWORD m_dw_thread_id;
 
+	NowLoading* m_p_now_loading;
+	TitleUIManager* m_p_title_ui_manager;
+
+	bool m_load_finished;
+	bool m_fadeout;
 
 };
 

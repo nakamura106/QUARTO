@@ -10,7 +10,7 @@ TitleScene::TitleScene()
 
 void TitleScene::InitScene()
 {
-	THE_SOUND->SoundBGM("Title");
+	
 
 	title_info.title_num = TitleNum::Title1;
 	title_info.title_state = TitleState::title;
@@ -23,62 +23,64 @@ void TitleScene::InitScene()
 	THE_SCENE->SetSceneStep(SceneStep::Main);
 
 	// シャン追加 //
-	//m_p_now_loading = new NowLoading({ 1700.0f, 860.0f });
-	//m_p_title_ui_manager = new TitleUIManager();
+	m_p_now_loading = new NowLoading({ 1700.0f, 860.0f });
+	m_p_title_ui_manager = new TitleUIManager();
 
-	//m_load_finished = false;
-	//m_fadeout = false;
+	m_load_finished = false;
+	m_fadeout = false;
 
-	//// マルチスレッド作成
-	//m_thread_handle = CreateThread(
-	//	NULL,
-	//	0,
-	//	Load,
-	//	NULL,
-	//	0,
-	//	&m_dw_thread_id
-	//);
+	// マルチスレッド作成
+	m_thread_handle = CreateThread(
+		NULL,
+		0,
+		Load,
+		NULL,
+		0,
+		&m_dw_thread_id
+	);
+
+
 	// //
 
 }
 
 // シャン追加 //
-//DWORD __stdcall TitleScene::Load(LPVOID param_)
-//{
-//	// タイトルシーンに必要なテクスチャ全部
-//	
-//	// デバッグ用
-//	Sleep(1000);
-//
-//	return 0;
-//}
+DWORD __stdcall TitleScene::Load(LPVOID param_)
+{
+	// タイトルシーンに必要なテクスチャ全部
+	THE_GRAPHICS->LoadTexture("Res/Tex/Title/BG.png","BG");
+	// デバッグ用
+	Sleep(1000);
+
+	return 0;
+}
 // //
 
 void TitleScene::UpdateScene()
 {
 	// シャン追加 //
-	//if (m_load_finished == false)
-	//{
-	//	if (WaitForSingleObject(m_thread_handle, 0) != WAIT_OBJECT_0)
-	//	{
-	//		m_p_now_loading->Update();
-	//		return;
-	//	}
-	//	// 下記に必要なオブジェクトまたはUIなどを作成
+	if (m_load_finished == false)
+	{
+		if (WaitForSingleObject(m_thread_handle, 0) != WAIT_OBJECT_0)
+		{
+			m_p_now_loading->Update();
+			return;
+		}
+		// 下記に必要なオブジェクトまたはUIなどを作成
 
 
-	//	m_load_finished = true;
-	//}
+		m_load_finished = true;
+	}
 
-	//if (m_fadeout == true)
-	//{
-	//	if (m_p_title_ui_manager->FadeOut())
-	//	{
-	//		title_info.title_state = TitleState::Game;
-	//		m_fadeout = false;
-	//	}
-	//	return;
-	//}
+	if (m_fadeout == true)
+	{
+		if (m_p_title_ui_manager->FadeOut())
+		{
+			title_info.title_state = TitleState::Game;
+			m_fadeout = false;
+		}
+		return;
+	}
 	// //
 
 	if (THE_INPUT->GetKeyDown(KeyCode::ONE_KEY))
@@ -143,13 +145,13 @@ void TitleScene::EndScene()
 void TitleScene::Draw()
 {
 	// シャン追加 //
-	/*if (WaitForSingleObject(m_thread_handle, 0) != WAIT_OBJECT_0)
+	if (WaitForSingleObject(m_thread_handle, 0) != WAIT_OBJECT_0)
 	{
 		m_p_now_loading->Draw();
 		return;
-	}*/
+	}
 
-	//THE_GRAPHICS->DrawTexture(&tex, D3DXVECTOR2(0, 0));
+	THE_GRAPHICS->DrawTexture("BG", D3DXVECTOR2(0, 0));
 	// //
 
 	if (title_info.title_num == TitleNum::Title1)

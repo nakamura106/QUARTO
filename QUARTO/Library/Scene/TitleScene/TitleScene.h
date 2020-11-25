@@ -5,6 +5,8 @@
 #include"../../Graphics/Graphics.h"
 #include "../../../UI/NowLoading.h"
 #include "../../../UI/SceneUIManager/TitleUIManager.h"
+#include<map>
+#include<string>
 
 class TitleScene :public BaseScene
 {
@@ -35,8 +37,7 @@ private:
 		TitleNum title_num;
 	}title_info;
 
-	Graphics::TEXTURE_DATA tex;
-
+	std::map<std::string, Graphics::TEXTURE_DATA*>tex;
 
 public:
 	TitleScene();

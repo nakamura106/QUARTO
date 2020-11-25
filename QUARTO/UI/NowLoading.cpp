@@ -17,7 +17,7 @@ void NowLoading::Update()
 
 void NowLoading::Draw()
 {
-	THE_GRAPHICS->DrawTexture(
+	THE_GRAPHICS->DrawFadeTexture(
 		THE_GRAPHICS->GetTexture("loading_background"),
 		{ 0.0f,0.0f },
 		255);

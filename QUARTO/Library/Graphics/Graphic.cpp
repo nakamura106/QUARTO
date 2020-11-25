@@ -304,28 +304,28 @@ bool Graphics::LoadTexture(const std::string file_name_, std::string key_name_)
 	return true;
 }
 
-void Graphics::DrawTexture(TEXTURE_DATA* texture_, D3DXVECTOR2 pos_)
+void Graphics::DrawTexture(std::string key_, D3DXVECTOR2 pos_)
 {
 	CUSTOM_VERTEX bg[4] =
 	{
 		// 左上頂点
 		{ pos_.x, pos_.y, 0.0f, 1.0f, 0.0f, 0.0f },
 		// 右上頂点
-		{ pos_.x + texture_->width, pos_.y, 0.0f, 1.0f, 1.0f, 0.0f },
+		{ pos_.x + m_texture_list[key_]->width, pos_.y, 0.0f, 1.0f, 1.0f, 0.0f },
 		// 右下頂点
-		{ pos_.x + texture_->width, pos_.y + texture_->height, 0.0f, 1.0f, 1.0f, 1.0f },
+		{ pos_.x + m_texture_list[key_]->width, pos_.y + m_texture_list[key_]->height, 0.0f, 1.0f, 1.0f, 1.0f },
 		// 左下頂点
-		{ pos_.x, pos_.y + texture_->height, 0.0f, 1.0f, 0.0f, 1.0f },
+		{ pos_.x, pos_.y + m_texture_list[key_]->height, 0.0f, 1.0f, 0.0f, 1.0f },
 	};
 
 	device_->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);
 
-	device_->SetTexture(0, texture_->texture);
+	device_->SetTexture(0, m_texture_list[key_]->texture);
 
 	device_->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, bg, sizeof(CUSTOM_VERTEX));
 }
 
-void Graphics::DrawTexture(TEXTURE_DATA* p_texture_, D3DXVECTOR2 pos_, UCHAR transparency_, int tex_width, int tex_height)
+void Graphics::DrawFadeTexture(TEXTURE_DATA* p_texture_, D3DXVECTOR2 pos_, UCHAR transparency_, int tex_width, int tex_height)
 {
 	if (tex_width == NULL)
 	{
@@ -378,6 +378,8 @@ void Graphics::DrawUIUVTexture(TEXTURE_DATA * texture_, D3DXVECTOR2 pos_, float 
 	device_->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, effect, sizeof(CUSTOM_VERTEX));
 
 }
+
+
 
 void Graphics::Animation2D(TEXTURE_DATA* p_texture_, D3DXVECTOR2 pos_, int split_x_, int split_y_, int animation_graph_num_)
 {

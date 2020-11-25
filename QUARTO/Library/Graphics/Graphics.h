@@ -147,7 +147,7 @@ public:
 	bool LoadTexture(const std::string file_name_, std::string key_name_);
 
 	//画像まるまる一枚描画
-	void DrawTexture(TEXTURE_DATA* texture_, D3DXVECTOR2 pos_);
+	void DrawTexture(std::string key_, D3DXVECTOR2 pos_);
 
 	/** DrawTextureのオーバーロード
 	* @brief 2D用描画関数
@@ -157,7 +157,7 @@ public:
 	* @param[in] tex_width テクスチャの横幅
 	* @param[in] tex_height テクスチャの縦幅
 	*/
-	void DrawTexture(
+	void DrawFadeTexture(
 		TEXTURE_DATA* p_texture_,
 		D3DXVECTOR2 pos_,
 		UCHAR transparency_ = 255,

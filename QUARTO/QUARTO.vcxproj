@@ -155,7 +155,6 @@
     <ClCompile Include="Library\Scene\GameEndScene\GameEndScene.cpp" />
     <ClCompile Include="Library\Scene\GameMainScene\GameMainScene.cpp" />
     <ClCompile Include="Library\Scene\HelpScene\HelpScene.cpp" />
-    <ClCompile Include="Library\Scene\TitleScene\TitleObject.cpp" />
     <ClCompile Include="Library\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Library\Sound\Sound.cpp" />
     <ClCompile Include="Library\Video\Video.cpp" />
@@ -179,7 +178,6 @@
     <ClInclude Include="Library\Scene\GameEndScene\GameEndScene.h" />
     <ClInclude Include="Library\Scene\GameMainScene\GameMainScene.h" />
     <ClInclude Include="Library\Scene\HelpScene\HelpScene.h" />
-    <ClInclude Include="Library\Scene\TitleScene\TitleObject.h" />
     <ClInclude Include="Library\Scene\TitleScene\TitleScene.h" />
     <ClInclude Include="Library\Sound\Sound.h" />
     <ClInclude Include="Library\Video\Video.h" />
